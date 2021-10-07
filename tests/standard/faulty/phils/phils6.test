@@ -1,0 +1,56 @@
+Enum STATE = {thinking,hungry,eating};
+
+Global fork0 : BOOL;
+Global fork1 : BOOL;
+Global fork2 : BOOL;
+Global fork3 : BOOL;
+Global fork4 : BOOL;
+Global fork5 : BOOL;
+
+
+Process OddPhil(forkL: BOOL, forkR:BOOL){
+   
+   s : STATE;
+   hasL, hasR : BOOL;
+   Initial: s == thinking && !hasL && !hasR && forkR && forkL;
+
+   [hungry] s == thinking -> s = hungry;
+   [getLeft] s == hungry && forkL && !hasL && !hasR  -> forkL=false, hasL=true;
+   [getRight] s == hungry && hasL && forkR && !hasR -> forkR = false, hasR=true;
+   [eating] s == hungry && hasL && hasR -> s = eating; 
+   [thinking] s == eating -> s = thinking, forkL=true, forkR=true, hasR=false, hasL=false;
+}
+
+Process EvenPhil(forkL: BOOL, forkR:BOOL){
+
+   s : STATE;
+   hasL, hasR : BOOL;
+   Initial: s == thinking && !hasL && !hasR && forkR && forkL;
+
+   [hungry] s == thinking -> s = hungry;
+   [getRight] s == hungry && forkR && !hasL && !hasR  -> forkR=false, hasR=true; 
+   [getLeft] s == hungry && hasR && forkL && !hasL -> forkL = false, hasL=true;
+   [eating] s == hungry && hasL && hasR -> s = eating; 
+   [thinking] s == eating -> s = thinking, forkL=true, forkR=true, hasR=false, hasL=false;
+   [getLeft] faulty s == hungry && !hasR && forkL && !hasL -> forkL = false, hasL=true;
+   
+   
+}
+
+
+Main(){
+ phil1:OddPhil;
+ phil2:EvenPhil;
+ phil3:EvenPhil;
+ phil4:EvenPhil;
+ phil5:EvenPhil;
+ phil6:EvenPhil;
+
+
+ run phil1(fork5, fork0);
+ run phil2(fork0, fork1);
+ run phil3(fork1, fork2);
+ run phil4(fork2, fork3);
+ run phil5(fork3, fork4);
+ run phil6(fork4, fork5);
+}

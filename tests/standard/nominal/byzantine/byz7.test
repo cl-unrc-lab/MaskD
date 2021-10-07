@@ -1,0 +1,58 @@
+Global g1g2A,g1g3A,g1g4A,g1g5A,g1g6A,g1g7A: BOOL; //Commander(g1) attack messages
+Global g2g3A,g2g4A,g2g5A,g2g6A,g2g7A: BOOL; //Lieutenant1(g2) attack messages
+Global g3g2A,g3g4A,g3g5A,g3g6A,g3g7A: BOOL; //Lieutenant2(g3) attack messages
+Global g4g2A,g4g3A,g4g5A,g4g6A,g4g7A: BOOL; //Lieutenant3(g4) attack messages
+Global g5g2A,g5g3A,g5g4A,g5g6A,g5g7A: BOOL; //Lieutenant4(g5) attack messages
+Global g6g2A,g6g3A,g6g4A,g6g5A,g6g7A: BOOL; //Lieutenant5(g6) attack messages
+Global g7g2A,g7g3A,g7g4A,g7g5A,g7g6A: BOOL; //Lieutenant6(g7) attack messages
+
+Global g1g2R,g1g3R,g1g4R,g1g5R,g1g6R,g1g7R: BOOL; //Commander(g1) retreat messages
+Global g2g3R,g2g4R,g2g5R,g2g6R,g2g7R: BOOL; //Lieutenant1(g2) retreat messages
+Global g3g2R,g3g4R,g3g5R,g3g6R,g3g7R: BOOL; //Lieutenant2(g3) retreat messages
+Global g4g2R,g4g3R,g4g5R,g4g6R,g4g7R: BOOL; //Lieutenant3(g4) retreat messages
+Global g5g2R,g5g3R,g5g4R,g5g6R,g5g7R: BOOL; //Lieutenant4(g5) retreat messages
+Global g6g2R,g6g3R,g6g4R,g6g5R,g6g7R: BOOL; //Lieutenant5(g6) retreat messages
+Global g7g2R,g7g3R,g7g4R,g7g5R,g7g6R: BOOL; //Lieutenant6(g7) retreat messages
+
+Global A2,A3,A4,A5,A6,A7: BOOL; //The Attack decision of each lieutenant
+Global R2,R3,R4,R5,R6,R7: BOOL; //The Retreat decision of each lieutenant
+
+Process Commander{
+	s0,s1: BOOL;
+	Initial: s0 && !s1;
+		[sA] s0 -> g1g2A = true, g1g3A = true, g1g4A = true, g1g5A = true, g1g6A = true, g1g7A = true, s0= false, s1=true;
+		[sR] s0 -> g1g2R = true, g1g3R = true, g1g4R = true, g1g5R = true, g1g6R = true, g1g7R = true, s0= false, s1=true;
+}
+
+
+Process Lieutenant(attack: BOOL, retreat: BOOL, fw1A: BOOL, fw2A:BOOL, fw3A:BOOL, fw4A:BOOL, fw5A:BOOL, fw1R:BOOL, fw2R:BOOL, fw3R:BOOL, fw4R:BOOL, fw5R:BOOL, a1:BOOL, a2:BOOL, a3:BOOL, a4:BOOL, a5:BOOL, r1:BOOL, r2:BOOL, r3:BOOL, r4:BOOL, r5:BOOL, dA:BOOL, dR:BOOL){ 
+	s0,s1,s2, isBetrayer: BOOL;
+	Initial: s0 && !s1 && !s2 && !isBetrayer;
+		[fA] s0 && attack && !isBetrayer -> fw1A = true, fw2A= true, fw3A= true, fw4A= true, fw5A= true, s0 = false, s1 = true;
+		[fR] s0 && retreat && !isBetrayer -> fw1R = true, fw2R = true, fw3R = true, fw4R = true, fw5R = true, s0 = false, s1 = true;
+		[fA] s0 && attack && isBetrayer -> fw1R = true, fw2R = true, fw3R = true, fw4R = true, fw5R = true, s0 = false, s1 = true;
+		[fR] s0 && retreat && isBetrayer -> fw1A = true, fw2A= true, fw3A= true, fw4A= true, fw5A= true, s0 = false, s1 = true;
+		[Attack] s1 && !isBetrayer && (attack&&a1&&a2&&a3||attack&&a1&&a2&&a4||attack&&a1&&a2&&a5||attack&&a1&&a3&&a4||attack&&a1&&a3&&a5||attack&&a1&&a4&&a5||attack&&a2&&a3&&a4||attack&&a2&&a3&&a5||attack&&a2&&a4&&a5||attack&&a3&&a4&&a5||a1&&a2&&a3&&a4||a1&&a2&&a3&&a5||a1&&a2&&a4&&a5||a1&&a3&&a4&&a5||a2&&a3&&a4&&a5) -> s1 = false, s2 = true, dA = true;
+		[Retreat] s1 && !isBetrayer && (retreat&&r1&&r2&&r3||retreat&&r1&&r2&&r4||retreat&&r1&&r2&&r5||retreat&&r1&&r3&&r4||retreat&&r1&&r3&&r5||retreat&&r1&&r4&&r5||retreat&&r2&&r3&&r4||retreat&&r2&&r3&&r5||retreat&&r2&&r4&&r5||retreat&&r3&&r4&&r5||r1&&r2&&r3&&r4||r1&&r2&&r3&&r5||r1&&r2&&r4&&r5||r1&&r3&&r4&&r5||r2&&r3&&r4&&r5) -> s1 = false, s2 = true, dR = true;
+
+}
+
+
+
+Main(){
+    g1:Commander;
+    g2:Lieutenant;
+    g3:Lieutenant;
+    g4:Lieutenant;
+    g5:Lieutenant;
+    g6:Lieutenant;
+    g7:Lieutenant;
+    run g1();
+    run g2(g1g2A,g1g2R,g2g3A,g2g4A,g2g5A,g2g6A,g2g7A,g2g3R,g2g4R,g2g5R,g2g6R,g2g7R,g3g2A,g4g2A,g5g2A,g6g2A,g7g2A,g3g2R,g4g2R,g5g2R,g6g2R,g7g2R,A2,R2);
+    run g3(g1g3A,g1g3R,g3g2A,g3g4A,g3g5A,g3g6A,g3g7A,g3g2R,g3g4R,g3g5R,g3g6R,g3g7R,g2g3A,g4g3A,g5g3A,g6g3A,g7g3A,g2g3R,g4g3R,g5g3R,g6g3R,g7g3R,A3,R3);
+    run g4(g1g4A,g1g4R,g4g2A,g4g3A,g4g5A,g4g6A,g4g7A,g4g2R,g4g3R,g4g5R,g4g6R,g4g7R,g2g4A,g3g4A,g5g4A,g6g4A,g7g4A,g2g4R,g3g4R,g5g4R,g6g4R,g7g4R,A4,R4);
+    run g5(g1g5A,g1g5R,g5g2A,g5g3A,g5g4A,g5g6A,g5g7A,g5g2R,g5g3R,g5g4R,g5g6R,g5g7R,g2g5A,g3g5A,g4g5A,g6g5A,g7g5A,g2g5R,g3g5R,g4g5R,g6g5R,g7g5R,A5,R5);
+    run g6(g1g6A,g1g6R,g6g2A,g6g3A,g6g4A,g6g5A,g6g7A,g6g2R,g6g3R,g6g4R,g6g5R,g6g7R,g2g6A,g3g6A,g4g6A,g5g6A,g7g6A,g2g6R,g3g6R,g4g6R,g5g6R,g7g6R,A6,R6);
+    run g7(g1g7A,g1g7R,g7g2A,g7g3A,g7g4A,g7g5A,g7g6A,g7g2R,g7g3R,g7g4R,g7g5R,g7g6R,g2g7A,g3g7A,g4g7A,g5g7A,g6g7A,g2g7R,g3g7R,g4g7R,g5g7R,g6g7R,A7,R7);
+
+}

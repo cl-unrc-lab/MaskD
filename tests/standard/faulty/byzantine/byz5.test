@@ -1,0 +1,57 @@
+Enum STATE = {idle,sent,finished};
+Enum ORDER = {null,retreat,attack};
+
+Global g1g2,g1g3,g1g4,g1g5: ORDER; //Commander(g1) messages
+Global g2g3,g2g4,g2g5: ORDER; //Lieutenant1(g2) messages
+Global g3g2,g3g4,g3g5: ORDER; //Lieutenant2(g3) messages
+Global g4g2,g4g3,g4g5: ORDER; //Lieutenant3(g4) messages
+Global g5g2,g5g3,g5g4: ORDER; //Lieutenant4(g5) messages
+
+Global d2,d3,d4,d5: ORDER; //The decision of each lieutenant
+Global b2,b3,b4,b5: BOOL;
+
+Process Commander{
+	s: STATE;
+	Initial: s == idle && g1g2 == null && g1g3 == null && g1g4 == null && g1g5 == null && g2g3 == null && g2g4 == null && g2g5 == null && g3g2 == null && g3g4 == null && g3g5 == null && g4g2 == null && g4g3 == null && g4g5 == null && g5g2 == null && g5g3 == null && g5g4 == null && d2 == null && d3 == null && d4 == null && d5 == null && !b2 && !b3 && !b4 && !b5;
+	
+		[sA] s == idle -> g1g2 = attack, g1g3 = attack, g1g4 = attack, g1g5 = attack, s = sent;
+		//[sR] s == idle -> g1g2 = retreat, g1g3 = retreat, g1g4 = retreat, g1g5 = retreat, s = sent;
+		[consensus] !(d2==null) && !(d3==null) && !(d4==null) && !(d5==null) && ((d2 == attack && !b2 && d3 == attack && !b3 && d4 == attack && !b4) || (d2 == attack && !b2 && d3 == attack && !b3 && d5 == attack && !b5) || (d2 == attack && !b2 && d4 == attack && !b4 && d5 == attack && !b5) || (d3 == attack && !b3 && d4 == attack && !b4 && d5 == attack && !b5)) -> s = finished;
+}
+
+
+Process Lieutenant(order: ORDER, fw1: ORDER, fw2:ORDER, fw3:ORDER, r1:ORDER, r2:ORDER, r3:ORDER, d:ORDER, b:BOOL){
+	//PARAMS: order: order from commander, fw1 and fw2: messages sent to other lieutenants, r1 and r2: messages received from other lieutenants, d: final decision 
+	s: STATE;
+	Initial: s == idle  && g1g2 == null && g1g3 == null && g1g4 == null && g1g5 == null && g2g3 == null && g2g4 == null && g2g5 == null && g3g2 == null && g3g4 == null && g3g5 == null && g4g2 == null && g4g3 == null && g4g5 == null && g5g2 == null && g5g3 == null && g5g4 == null && d2 == null && d3 == null && d4 == null && d5 == null && !b2 && !b3 && !b4 && !b5;
+	
+		[f] s == idle && order == attack && !b -> fw1 = attack, fw2= attack, fw3=attack, s = sent;
+		[f] s == idle && order == retreat && !b -> fw1 = retreat, fw2 = retreat, fw3 = retreat, s = sent;
+		[f] s == idle && !(order == null) && b -> fw1 = retreat, fw2= retreat, fw3 = retreat, s = sent;
+		[f] s == idle && !(order == null) && b -> fw1 = retreat, fw2= retreat, fw3 = attack, s = sent;
+		[f] s == idle && !(order == null) && b -> fw1 = retreat, fw2= attack, fw3 = attack, s = sent;
+		[f] s == idle && !(order == null) && b -> fw1 = attack, fw2= attack, fw3 = attack, s = sent;
+		[f] s == idle && !(order == null) && b -> fw1 = attack, fw2= attack, fw3 = retreat, s = sent;
+		[f] s == idle && !(order == null) && b -> fw1 = attack, fw2= retreat, fw3 = retreat, s = sent;
+		[f] s == idle && !(order == null) && b -> fw1 = attack, fw2= retreat, fw3 = attack, s = sent;
+		[f] s == idle && !(order == null) && b -> fw1 = retreat, fw2= attack, fw3 = retreat, s = sent;
+		[Betray] faulty s == idle && !b -> b = true; 
+		[Attack] s == sent && !(r1==null) && !(r2==null) && !(r3==null) && ((order == attack && r1 == attack && r2 == attack)||(order == attack && r1 == attack && r3 == attack)||(order == attack && r2 == attack && r3 == attack)||(r1 == attack && r2 == attack && r3 == attack)) -> s = finished, d = attack;
+		[Retreat] s == sent && !(r1==null) && !(r2==null) && !(r3==null) && ((order == retreat && r1 == retreat && r2 == retreat)||(order == retreat && r1 == retreat && r3 == retreat)||(order == retreat && r2 == retreat && r3 == retreat)||(r1 == retreat && r2 == retreat && r3 == retreat)) -> s = finished, d = retreat;
+
+}
+
+
+
+Main(){
+    g1:Commander;
+    g2:Lieutenant;
+    g3:Lieutenant;
+    g4:Lieutenant;
+    g5:Lieutenant;
+    run g1();
+    run g2(g1g2,g2g3,g2g4,g2g5,g3g2,g4g2,g5g2,d2,b2);
+    run g3(g1g3,g3g2,g3g4,g3g5,g2g3,g4g3,g5g3,d3,b3);
+    run g4(g1g4,g4g2,g4g3,g4g5,g2g4,g3g4,g5g4,d4,b4);
+    run g5(g1g5,g5g2,g5g3,g5g4,g2g5,g3g5,g4g5,d5,b5);
+}

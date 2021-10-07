@@ -1,0 +1,24 @@
+Process Memory {
+    w: BOOL; // the last value written, 
+	r: BOOL; // the value we can read from the memory
+    c0: BOOL; // the first bit
+    c1: BOOL; // the second bit
+    c2: BOOL; // the third bit
+  
+    Initial: w && c0 && c1 && c2 && r;
+	
+	[write1] true -> w=true, c0=true, c1=true, c2=true, r =true;
+	[write0] true -> w=false, c0=false, c1=false, c2=false, r =false;
+	[read0] !r -> r = r;
+	[read1] r -> r = r;
+	[fail1] faulty true -> c0=!c0, r =(!c0&&c1)||(c1&&c2)||(!c0&&c2); 
+	[fail2] faulty true -> c1=!c1, r =(c0&&!c1)||(!c1&&c2)||(c0&&c2); 
+	[fail3] faulty true -> c2=!c2, r =(c0&&c1)||(c1&&!c2)||(c0&&!c2);    
+}
+
+Main(){
+	m1: Memory;
+	run m1();
+}
+
+

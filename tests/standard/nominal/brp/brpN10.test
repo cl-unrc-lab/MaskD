@@ -1,0 +1,78 @@
+
+//N=10 number of chunks
+//MAX=10 number of retransmissions
+
+Enum SSTATE = {idle,nextframe,waitack,retransmit,success,error,finish};
+Enum SREP = {bottom,nok,dk,ok};
+Enum RSTATE = {newfile,fstsafe,framereceived,framereported,idle,finish};
+Enum RREP = {bottom,fst,inc,ok,nok};
+
+Global fs,ls,bs: BOOL;
+Global flagK,flagL: BOOL;
+Global N,MAX: INT;
+
+Process Sender {
+    s: SSTATE;
+    srep: SREP;
+    sab: BOOL;
+    rtr: INT;
+    i: INT;
+
+   	Initial: s == idle && srep == bottom && !bs && !sab && !fs && !ls && rtr == 0 && i==1 && !flagK && !flagL && MAX == 10 && N == 10;
+   	
+	
+	//idle
+	[NewFile] s == idle -> s = nextframe, srep = bottom, i = 1; 
+
+	//next frame
+	[sendChunk] s == nextframe && !flagK -> s = waitack, fs = (i==1), ls = (i==N), bs = sab, rtr = 0, flagK = true;
+
+	//wait ack
+	[receiveAck] s == waitack && !flagK && flagL -> s = success, sab = !sab, flagL = false; 
+
+	// success
+	[success1] s == success && i < N -> s = nextframe, i = i+1;
+	[success2] s == success && i == N -> s = finish, srep = ok;
+
+
+}
+
+Process Receiver {
+	r: RSTATE; 
+	rrep: RREP; 
+	fr,lr,br,rab,recv: BOOL;
+
+	Initial: r == newfile && rrep == bottom && !fr && !lr && !br && !rab && !recv && !fs && !ls && !bs && !flagK && !flagL && MAX == 10 && N == 10;
+   	
+	
+	// new_file
+	[receiveFirstChunk] r == newfile && flagK && !flagL -> r = fstsafe, fr = fs, lr = ls, br = bs, recv = true, flagK = false;
+
+	// fst_safe_frame
+	[e] r == fstsafe && !flagL -> r = framereceived, rab = br;
+
+	// frame_received
+	[setIndication1] r == framereceived && rab==br && fr && !lr && !flagL-> r = framereported, rrep = fst;
+	[setIndication2] r == framereceived && rab==br && !fr && !lr && !flagL -> r = framereported, rrep = inc;
+	[setIndication3] r == framereceived && rab==br && !fr && lr && !flagL -> r = framereported, rrep = ok;
+	[sendAck] r == framereceived && !(rab==br)  && !flagL -> r = finish, flagL = true;  
+
+	// frame_reported
+	[sendAck1] r == framereported && !flagL && !lr -> r = idle, rab = !rab, flagL = true;
+	[sendAck2] r == framereported && !flagL && lr -> r = finish, rab = !rab, flagL = true;
+
+	// idle
+	[receiveChunk] r == idle  && flagK && !flagL -> r = framereceived, fr = fs, lr = ls, br = bs, recv = true,flagK = false;
+
+
+}
+
+
+Main(){
+	s: Sender;
+	r: Receiver;
+	run s();
+	run r();
+}
+
+

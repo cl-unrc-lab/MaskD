@@ -1,0 +1,85 @@
+#script for replicating experimental evaluation results
+
+echo "----------------------------Memory Cell test----------------------------"
+echo "3 bits"
+time ./maskD   ../tests/standard/nominal/memoryCell/memoryCell.test ../tests/standard/faulty/memoryCell/memoryCell3.test
+echo "5 bits"
+time ./maskD   ../tests/standard/nominal/memoryCell/memoryCell.test ../tests/standard/faulty/memoryCell/memoryCell5.test
+echo "7 bits"
+time ./maskD   ../tests/standard/nominal/memoryCell/memoryCell.test ../tests/standard/faulty/memoryCell/memoryCell7.test
+echo "9 bits"
+time ./maskD   ../tests/standard/nominal/memoryCell/memoryCell.test ../tests/standard/faulty/memoryCell/memoryCell9.test
+echo "11 bits"
+time ./maskD   ../tests/standard/nominal/memoryCell/memoryCell.test ../tests/standard/faulty/memoryCell/memoryCell11.test
+
+echo "----------------------------N-Modular Redundancy test----------------------------"
+echo "3 modules "
+time ./maskD    ../tests/standard/nominal/nmr/nmr3.test ../tests/standard/faulty/nmr/nmr3.test
+echo "5 modules"
+time ./maskD    ../tests/standard/nominal/nmr/nmr5.test ../tests/standard/faulty/nmr/nmr5.test
+echo "7 modules"
+time ./maskD    ../tests/standard/nominal/nmr/nmr7.test ../tests/standard/faulty/nmr/nmr7.test
+echo "9 modules"
+time ./maskD    ../tests/standard/nominal/nmr/nmr9.test ../tests/standard/faulty/nmr/nmr9.test
+echo "11 modules"
+time ./maskD    ../tests/standard/nominal/nmr/nmr11.test ../tests/standard/faulty/nmr/nmr11.test
+
+echo "----------------------------Philosophers test (odd/even model)----------------------------"
+echo "2 phils"
+time ./maskD    -nb -l ../tests/standard/nominal/phils/phils2.test ../tests/standard/faulty/phils/phils2.test
+echo "3 phils"
+time ./maskD    -nb -l ../tests/standard/nominal/phils/phils3.test ../tests/standard/faulty/phils/phils3.test
+echo "4 phils"
+time ./maskD    -nb -l ../tests/standard/nominal/phils/phils4.test ../tests/standard/faulty/phils/phils4.test
+echo "5 phils"
+time ./maskD    -nb -l ../tests/standard/nominal/phils/phils5.test ../tests/standard/faulty/phils/phils5.test
+echo "6 phils"
+time ./maskD    -nb -l ../tests/standard/nominal/phils/phils6.test ../tests/standard/faulty/phils/phils6.test
+
+echo "----------------------------Byzantine Generals test----------------------------"
+echo "3 generals "
+time ./maskD    ../tests/standard/nominal/byzantine/byz3.test ../tests/standard/faulty/byzantine/byz3.test 
+echo "4 generals"
+time ./maskD    ../tests/standard/nominal/byzantine/byz4.test ../tests/standard/faulty/byzantine/byz4.test
+echo "5 generals"
+time ./maskD    ../tests/standard/nominal/byzantine/byz5.test ../tests/standard/faulty/byzantine/byz5.test
+
+echo "----------------------------Raft Log[size=5] Replication (Consistency Check) test----------------------------"
+echo "1 follower "
+time ./maskD    ../tests/standard/nominal/raft/raftConsistency.test ../tests/standard/faulty/raft/raftConsistency.test
+echo "2 followers"
+time ./maskD    ../tests/standard/nominal/raft/raftConsistency2.test ../tests/standard/faulty/raft/raftConsistency2.test
+echo "3 followers"
+time ./maskD    ../tests/standard/nominal/raft/raftConsistency3.test ../tests/standard/faulty/raft/raftConsistency3.test
+
+echo "----------------------------Bounded Retransmission Protocol test----------------------------"
+echo "1 chunk(s), 1 retransmission(s)"
+time ./maskD    ../tests/standard/nominal/brp/brpN1.test ../tests/standard/faulty/brp/brpN1M1.test
+echo "1 chunk(s), 5 retransmission(s)"
+time ./maskD    ../tests/standard/nominal/brp/brpN1.test ../tests/standard/faulty/brp/brpN1M5.test
+echo "1 chunk(s), 10 retransmission(s)"
+time ./maskD    ../tests/standard/nominal/brp/brpN1.test ../tests/standard/faulty/brp/brpN1M10.test
+echo "1 chunk(s), 20 retransmission(s)"
+time ./maskD    ../tests/standard/nominal/brp/brpN1.test ../tests/standard/faulty/brp/brpN1M20.test
+echo "1 chunk(s), 40 retransmission(s)"
+time ./maskD    ../tests/standard/nominal/brp/brpN1.test ../tests/standard/faulty/brp/brpN1M40.test
+echo "5 chunk(s), 1 retransmission(s)"
+time ./maskD    ../tests/standard/nominal/brp/brpN5.test ../tests/standard/faulty/brp/brpN5M1.test
+echo "5 chunk(s), 5 retransmission(s)"
+time ./maskD    ../tests/standard/nominal/brp/brpN5.test ../tests/standard/faulty/brp/brpN5M5.test
+echo "5 chunk(s), 10 retransmission(s)"
+time ./maskD    ../tests/standard/nominal/brp/brpN5.test ../tests/standard/faulty/brp/brpN5M10.test
+echo "5 chunk(s), 20 retransmission(s)"
+time ./maskD    ../tests/standard/nominal/brp/brpN5.test ../tests/standard/faulty/brp/brpN5M20.test
+echo "5 chunk(s), 40 retransmission(s)"
+time ./maskD    ../tests/standard/nominal/brp/brpN5.test ../tests/standard/faulty/brp/brpN5M40.test
+echo "10 chunk(s), 1 retransmission(s)"
+time ./maskD    ../tests/standard/nominal/brp/brpN10.test ../tests/standard/faulty/brp/brpN10M1.test
+echo "10 chunk(s), 5 retransmission(s)"
+time ./maskD    ../tests/standard/nominal/brp/brpN10.test ../tests/standard/faulty/brp/brpN10M5.test
+echo "10 chunk(s), 10 retransmission(s)"
+time ./maskD    ../tests/standard/nominal/brp/brpN10.test ../tests/standard/faulty/brp/brpN10M10.test
+echo "10 chunk(s), 20 retransmission(s)"
+time ./maskD    ../tests/standard/nominal/brp/brpN10.test ../tests/standard/faulty/brp/brpN10M20.test
+echo "10 chunk(s), 40 retransmission(s)"
+time ./maskD    ../tests/standard/nominal/brp/brpN10.test ../tests/standard/faulty/brp/brpN10M40.test

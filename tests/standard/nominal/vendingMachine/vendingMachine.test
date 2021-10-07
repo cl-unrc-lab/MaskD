@@ -1,0 +1,19 @@
+Enum STATE = {pay,select,soda,beer};
+
+
+Process Machine{
+	s: STATE;
+	Initial: s==pay;
+	[insertCoin] s == pay -> s = select;
+	[a] s == select -> s = soda;
+	[a] s == select -> s = beer;
+	[getSoda] s == soda -> s = pay;
+	[getBeer] s == beer -> s = pay;
+}
+
+
+
+Main(){
+    m1:Machine;
+    run m1();
+}

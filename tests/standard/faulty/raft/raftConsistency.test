@@ -1,0 +1,39 @@
+Enum MSG = {null, accept, entry};
+
+
+Global lToF1: MSG;
+Global index1: INT;
+
+Global a1: BOOL;
+
+
+Process Leader{
+	nextIndex1: INT;
+
+	committed: BOOL;
+	Initial: lToF1 == null && nextIndex1 == 20 && a1 && index1 == 0;
+	
+		[sendEntry1] a1 && nextIndex1>1 -> lToF1 = entry, a1 = false, nextIndex1 = nextIndex1-1, index1 = nextIndex1-1;
+}
+
+
+//myLastIndex,commonLastIndex
+Process Follower(recChan : MSG, a : BOOL, i: INT){
+	f: BOOL;
+	Initial:  lToF1 == null && a1 && index1 == 0 && !f;
+	
+		[receiveEntry] !f && recChan == entry && a==false && i>1 -> recChan = accept, a = true;
+		[receiveEntry] !f && recChan == entry && a==false && i==1 -> recChan = accept, a = true;
+		[fail] faulty !f  && i>1 -> f = true;
+		[receiveEntry]  f && recChan == entry && a==false -> recChan = null, a = true, f = false;
+
+}
+
+
+
+Main(){
+    leader:Leader;
+    f1:Follower;
+    run leader();
+    run f1(lToF1,a1,index1);
+}

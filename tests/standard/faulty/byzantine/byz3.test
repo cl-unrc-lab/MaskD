@@ -1,0 +1,47 @@
+Enum STATE = {idle,sent,finished};
+Enum ORDER = {null,retreat,attack};
+
+Global g1g2,g1g3: ORDER; //Commander(g1) messages
+Global g2g3: ORDER; //Lieutenant1(g2) messages
+Global g3g2: ORDER; //Lieutenant2(g3) messages
+
+Global d2,d3: ORDER; //The decision of each lieutenant
+Global b2,b3:BOOL;
+
+
+Process Commander{
+	s: STATE;
+	Initial: s==idle && g1g2==null && g1g3==null && g2g3==null && g3g2==null && d2==null && d3==null;
+	
+		[sA] s == idle -> g1g2 = attack, g1g3 = attack, s = sent;
+		//[sR] s == idle -> g1g2 = retreat, g1g3 = retreat, s = sent;
+		[consensus] !(d2==null) && !(d3==null) && ((d2 == attack && !b2 && d3 == attack && !b3))-> s = finished;
+}
+
+
+Process Lieutenant(order:ORDER, fw1:ORDER, r1:ORDER, d:ORDER, b:BOOL){
+	s: STATE;
+	Initial: s == idle && g1g2==null && g1g3==null && g2g3==null && g3g2==null && d2==null && d3==null && !b2 && !b3;
+	
+		[f] s == idle && order == attack && !b -> fw1 = attack, s = sent;
+		[f] s == idle && order == retreat && !b -> fw1 = retreat, s = sent;
+		[f] s == idle && !(order == null) && b -> fw1 = retreat, s = sent;
+		[f] s == idle && !(order == null) && b -> fw1 = attack, s = sent;
+		[Betray] faulty s == idle && !b -> b = true; 
+		[d] s == sent && !(r1==null) && ((order==attack && r1==attack)) -> s = finished, d = attack;
+		[d] s == sent && !(r1==null) && ((order==retreat && r1==retreat)) -> s = finished, d = retreat;
+		[d] s == sent && !(r1==null) && !((order==retreat && r1==retreat)) && !((order==attack && r1==attack)) -> s = finished, d = retreat;
+
+}
+
+
+
+
+Main(){
+    g1:Commander;
+    g2:Lieutenant;
+    g3:Lieutenant;
+    run g1();
+    run g2(g1g2,g2g3,g3g2,d2,b2);
+    run g3(g1g3,g3g2,g2g3,d3,b3);
+}

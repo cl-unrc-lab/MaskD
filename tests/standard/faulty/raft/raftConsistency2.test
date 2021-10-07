@@ -1,0 +1,41 @@
+Enum MSG = {null, accept, entry};
+
+
+Global lToF1, lToF2: MSG;
+Global index1, index2: INT;
+Global a1, a2: BOOL;
+
+
+Process Leader{
+	nextIndex1: INT;
+	nextIndex2: INT;
+	committed: BOOL;
+	Initial: lToF1 == null && nextIndex1 == 5 && a1 && index1 == 0 && lToF2 == null && nextIndex2 == 5 && a2 && index2 == 0;
+	
+		[sendEntry1] a1 && nextIndex1>1 -> lToF1 = entry, a1 = false, nextIndex1 = nextIndex1-1, index1 = nextIndex1-1;
+		[sendEntry2] a2 && nextIndex2>1 -> lToF2 = entry, a2 = false, nextIndex2 = nextIndex2-1, index2 = nextIndex2-1;
+}
+
+
+//myLastIndex,commonLastIndex
+Process Follower(recChan : MSG, a : BOOL, i: INT){
+	f: BOOL;
+	Initial:  lToF1 == null && a1 && index1 == 0 && lToF2 == null && a2 && index2 == 0 && !f;
+	
+		[receiveEntry] !f && recChan == entry && a==false && i>1 -> recChan = accept, a = true;
+		[receiveEntry] !f && recChan == entry && a==false && i==1 -> recChan = accept, a = true;
+		[fail] faulty !f  && i>1 -> f = true;
+		[receiveEntry]  f && recChan == entry && a==false -> recChan = null, a = true, f = false;
+
+}
+
+
+
+Main(){
+    leader:Leader;
+    f1:Follower;
+    f2:Follower;
+    run leader();
+    run f1(lToF1,a1,index1);
+    run f2(lToF2,a2,index2);
+}

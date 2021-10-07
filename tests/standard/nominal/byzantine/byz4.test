@@ -1,0 +1,44 @@
+Enum STATE = {idle,sent,finished};
+Enum ORDER = {null,retreat,attack};
+
+Global g1g2,g1g3,g1g4: ORDER; //Commander(g1) messages
+Global g2g3,g2g4: ORDER; //Lieutenant1(g2) messages
+Global g3g2,g3g4: ORDER; //Lieutenant2(g3) messages
+Global g4g2,g4g3: ORDER; //Lieutenant3(g4) messages
+
+Global d2,d3,d4: ORDER; //The decision of each lieutenant
+Global b2,b3,b4: BOOL;
+
+Process Commander{
+	s: STATE;
+	Initial: s == idle && g1g2 == null && g1g3 == null && g1g4 == null && g2g3 == null && g2g4 == null && g3g2 == null && g3g4 == null && g4g2 == null && g4g3 == null && d2 == null && d3 == null && d4 == null && !b2 && !b3 && !b4;
+		[sA] s == idle -> g1g2 = attack, g1g3 = attack, g1g4 = attack, s = sent;
+		//[sR] s == idle -> g1g2 = retreat, g1g3 = retreat, g1g4 = retreat, s = sent;
+		[consensus] !(d2==null) && !(d3==null) && !(d4==null) && ((d2 == attack && !b2 && d3 == attack && !b3) || (d2 == attack && !b2 && d4 == attack && !b4) || (d4 == attack && !b4 && d3 == attack && !b3))-> s = finished;
+}
+
+
+Process Lieutenant(order: ORDER, fw1: ORDER, fw2:ORDER, r1:ORDER, r2:ORDER, d:ORDER, b:BOOL){
+	//PARAMS: order: order from commander, fw1 and fw2: messages sent to other lieutenants, r1 and r2: messages received from other lieutenants, d: final decision 
+	//isBetrayer: BOOL;
+	s: STATE;
+	Initial: s == idle && g1g2 == null && g1g3 == null && g1g4 == null && g2g3 == null && g2g4 == null && g3g2 == null && g3g4 == null && g4g2 == null && g4g3 == null && d2 == null && d3 == null && d4 == null && !b2 && !b3 && !b4;
+		[f] s == idle && order == attack && !b -> fw1 = attack, fw2= attack, s = sent;
+		[f] s == idle && order == retreat && !b -> fw1 = retreat, fw2 = retreat, s = sent;
+		[d] s == sent && !(r1==null) && !(r2==null) && ((order == attack && r1 == attack)||(order == attack && r2 == attack)||(r1 == attack && r2 == attack)) -> s = finished, d = attack;
+		[d] s == sent && !(r1==null) && !(r2==null) && ((order == retreat && r1 == retreat)||(order == retreat && r2 == retreat)||(r1 == retreat && r2 == retreat)) -> s = finished, d = retreat;
+
+}
+
+
+
+Main(){
+    g1:Commander;
+    g2:Lieutenant;
+    g3:Lieutenant;
+    g4:Lieutenant;
+    run g1();
+    run g2(g1g2,g2g3,g2g4,g3g2,g4g2,d2,b2);
+    run g3(g1g3,g3g2,g3g4,g2g3,g4g3,d3,b3);
+    run g4(g1g4,g4g2,g4g3,g2g4,g3g4,d4,b4);
+}

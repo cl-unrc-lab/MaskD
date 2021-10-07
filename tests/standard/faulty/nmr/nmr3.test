@@ -1,0 +1,40 @@
+Global i0,i1,i2:BOOL;
+
+Process Module(out:BOOL) {
+	Initial: !i0 && !i1 && !i2;
+	
+
+	[normal] true -> out = out;
+	[fail] faulty true -> out = !out;
+}
+
+Process Voter{
+	Initial: !i0 && !i1 && !i2;
+	
+
+	[vote] (i0&&i1)||(i1&&i2)||(i0&&i2) -> i0 = i0;
+	
+}
+
+Process Environment{
+	Initial: !i0 && !i1 && !i2;
+	
+
+	[input0] true -> i0 = false, i1 = false, i2 = false;
+	[input1] true -> i0 = true, i1 = true, i2 = true;
+}
+
+Main(){
+	m0: Module;
+	m1: Module;
+	m2: Module;
+	v0: Voter;
+	e0: Environment;
+	run m0(i0);
+	run m1(i1);
+	run m2(i2);
+	run v0();
+	run e0();
+}
+
+
