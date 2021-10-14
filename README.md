@@ -13,7 +13,7 @@ $ ./maskD (then follow the help instructions).
 Examples can be found
 in the directory: tests/
 
-To replicate all experimental results shown on paper "Measuring Masking Fault-Tolerance" (Castro, D’Argenio, Demasi, Putruele), run the script: ./mask-test . For the journal extended version, the algorithms for deterministic games can be run with: ./mask-test-det
+To replicate all experimental results (Fix-Point Algorithm) run the script: ./mask-test . For the Shortest Path Algorithm experiments run: ./mask-test-det
 
 
 
