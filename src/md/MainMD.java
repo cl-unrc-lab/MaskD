@@ -80,7 +80,7 @@ public class MainMD {
       System.out.println("            -nb : toggle if faulty model do not need to simulate nominal model");
       System.out.println("            -det : use deterministic masking distance algorithm");
       System.out.println("            -d : create dot file");
-      System.out.println("            -t : print error trace (only works with -det)");
+      System.out.println("            -t : print error trace (uses det. algorithm)");
       System.out.println("            -s : start simulation");
       System.out.println("            -l : also treat deadlock as error state");
       System.out.println("            -v : turn verbosity on");

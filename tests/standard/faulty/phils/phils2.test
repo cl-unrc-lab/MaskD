@@ -23,7 +23,6 @@ Process EvenPhil(forkL: BOOL, forkR:BOOL){
    s : STATE;
    hasL, hasR : BOOL;
    Initial: s == thinking && !hasL && !hasR && forkR && forkL;
-   Normative: !(hasL && !hasR); 
 
    [hungry] s == thinking -> s = hungry;
    [getRight] s == hungry && forkR && !hasL && !hasR  -> forkR=false, hasR=true; 

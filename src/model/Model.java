@@ -19,9 +19,6 @@ public class Model {
 	private boolean isSpec;
 	private HashMap<String,Object> constants;
 
-	//EXPANSION SET
-	private HashMap<Triple,Double> probTransitions;
-
 	public Model(GlobalVarCollection svs, boolean isS) {
 		sharedVars = svs.getBoolVars();
 		sharedVars.addAll(svs.getEnumVars());
@@ -35,9 +32,6 @@ public class Model {
 		procDecls = new LinkedList<String>();
 		isWeak = false;
 		isSpec = isS;
-		//EXPANSION SET
-		constants = new HashMap<String,Object>();
-		probTransitions = new HashMap<Triple,Double>();
 	}
 
 	public void setInitial(ModelState v){
@@ -111,15 +105,6 @@ public class Model {
 			return false;
 		}
 		
-
-		/*for (Action a_ : actions.get(transition)){
-			if (a.getLabel().equals(a_.getLabel())){
-				return true;
-			}
-		}
-		System.out.println(actions.get(transition));
-		
-		return false;*/
 		return actions.get(transition).contains(a);
 	}
 
@@ -142,22 +127,6 @@ public class Model {
 		}
 		return false;
 	}
-
-	//EXPANSION SET
-	public boolean addProbEdge(ModelState from, ModelState to, Action a, Double prob) {
-		if (addEdge(from,to,a)){
-			Triple t = new Triple(from,to,a);
-			probTransitions.put(t,prob);
-			return true;
-		}
-		return false;
-	}
-
-
-	public Double getProb(ModelState from, ModelState to, Action a){
-		return probTransitions.get(new Triple(from,to,a));
-	}
-
 
 	public LinkedList<ModelState> getNodes(){
 		return nodes;
@@ -213,8 +182,6 @@ public class Model {
 
 	public void saturate(){
 		//Add tau self-loops
-		//if (!isWeak)
-		//	return;
 		for (ModelState p : nodes){
 			addEdge(p,p,new Action("&",false,true,isSpec)); // p -> p is internal
 		}
@@ -235,7 +202,6 @@ public class Model {
 			fsts = new LinkedList<ModelState>();
 			snds = new LinkedList<ModelState>();
 			lbls = new LinkedList<String>();
-			//isFs = new LinkedList<Boolean>();
 			isTaus = new LinkedList<Boolean>();
 
 			for (ModelState p : nodes){
@@ -262,7 +228,6 @@ public class Model {
 																snds.add(q);
 																lbls.add(lbl);
 																isTaus.add(isTau);
-																//isFs.add(isF);
 																change = true;		
 															}	
 														}
@@ -280,12 +245,11 @@ public class Model {
 
 			//update transition system
 			for (int i = 0; i < fsts.size(); i++){
-				//System.out.println(fsts.get(i) + "\n" + snds.get(i) + "\n" + lbls.get(i)+ "\n" + isTaus.get(i) + "\n=========================\n");
 				addEdge(fsts.get(i), snds.get(i), new Action(lbls.get(i), false, isTaus.get(i), isSpec));
 			}
-		}
 
-	
+		}
+		
 	}
 	
 }

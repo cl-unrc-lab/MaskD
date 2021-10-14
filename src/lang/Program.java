@@ -142,7 +142,7 @@ public class Program extends ProgramNode{
                         //create global successor curr_
                         ModelState curr_ = curr.createSuccessor(b.getAssignList(),i);
                         ModelState toOld = m.search(curr_);
-                        Action act = new Action(m.getProcDecls().get(i)+b.getLabel(),b.getIsFaulty(),b.getIsTau(),b.getReward(),isSpec);
+                        Action act = new Action(m.getProcDecls().get(i)+"."+b.getLabel(),b.getIsFaulty(),b.getIsTau(),b.getReward(),isSpec);
                         if (toOld == null){
                             m.addNode(curr_);
                             iterSet.add(curr_);
@@ -158,83 +158,6 @@ public class Program extends ProgramNode{
         return m;
     }
     
-    public Model toMDP(boolean isSpec){
-        Model m = new Model(globalVars, isSpec);
-
-        //states in m are lists of states (from processes)
-        //calculate initial state
-        ModelState init = new ModelState(m);
-        for (int j=0; j < mainProgram.getProcessDecl().size(); j++){
-            ProcessDecl pDecl = mainProgram.getProcessDecl().get(j);
-            for (int i = 0; i < process.getProcessList().size(); i++){
-                Proc proc = process.getProcessList().get(i);
-                if (pDecl.getType().equals(proc.getName())){
-                    init.getModel().getProcs().add(proc);
-                    init.getModel().getProcDecls().add(pDecl.getName());
-                    init.evalInit(proc.getInitialCond(),j);
-                }
-            }
-        }
-        
-        m.addNode(init);
-        m.setInitial(init);
-
-        TreeSet<ModelState> iterSet = new TreeSet<ModelState>();
-        iterSet.add(m.getInitial());
-        //build the whole model
-        while(!iterSet.isEmpty()){
-            ModelState curr = iterSet.pollFirst();
-            for (int i = 0; i < m.getProcDecls().size(); i++){ // for each process in current global state
-                for (Branch b : m.getProcs().get(i).getBranches()){
-                    if (b.getIsTau())
-                        m.setIsWeak(true);
-                    if (curr.satisfies(b.getGuard(),i)){
-                        //create global successor curr_
-                        if (b.getIsProb()){ //its a probabilistic branch
-                            //ProbabilisticAction act = new ProbabilisticAction(m.getProcDecls().get(i)+b.getLabel(),b.getIsFaulty(),b.getIsTau(),isSpec, null);
-                            Action act = new Action(m.getProcDecls().get(i)+b.getLabel(),b.getIsFaulty(),b.getIsTau(),b.getReward(),isSpec);
-                            act.setIsProbabilistic(true);
-                            //System.out.println(act.toString() + b.getReward());
-                            //LinkedList<Double> probs = new LinkedList<Double>();
-                            for (Code c : b.getAssignList()){ // each prob. of a single action
-                                ProbAssign pa = (ProbAssign)c;
-                                ModelState curr_ = curr.createSuccessor(pa.getAssigns(),i);
-                                ModelState toOld = m.search(curr_);
-                                //probs.add(pa.getProbability());
-                                //System.out.println(b.getLabel()+":"+pa.getProbability());
-                                if (toOld == null){
-                                    m.addNode(curr_);
-                                    iterSet.add(curr_);
-
-                                    m.addProbEdge(curr, curr_, act, pa.getProbability());
-                                }
-                                else{
-                                    m.addProbEdge(curr, toOld, act, pa.getProbability());
-                                }
-                            }
-                        }
-                        else{ // its a pure branch
-                            ModelState curr_ = curr.createSuccessor(b.getAssignList(),i);
-                            ModelState toOld = m.search(curr_);
-                            Action act = new Action(m.getProcDecls().get(i)+b.getLabel(),b.getIsFaulty(),b.getIsTau(),b.getReward(),isSpec);
-                            //System.out.println(act.toString() + b.getReward());
-                            //System.out.println(b.getLabel());
-                            if (toOld == null){
-                                m.addNode(curr_);
-                                iterSet.add(curr_);
-                                m.addProbEdge(curr, curr_, act,1.0);
-                            }
-                            else{
-                                m.addProbEdge(curr, toOld, act,1.0);
-                            }
-                        }
-                        
-                    }
-                }
-            }
-        }
-        return m;
-    }
 
     public void setName(String n){
         name = n;

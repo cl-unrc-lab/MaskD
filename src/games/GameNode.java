@@ -13,16 +13,12 @@ public class GameNode implements Comparable<Object>{
 	boolean visited; // Utility for graph traversal algorithms
 	int distanceValue; // Value of the game for this node
 	GameNode previousNodeInPath; // Previous Node in Shortest path to errState
-	boolean numbered; // True if marked with a temp mask distance
 	int id;
 	private static int idCounter = 0;
-	//EXPANSION SET
-	Double[] values; // for value iteration
 
 	public GameNode(){
 		visited = false;
 		distanceValue = 0;
-		values = new Double[2];
 		id = idCounter++;
 	}
 
@@ -33,8 +29,6 @@ public class GameNode implements Comparable<Object>{
 		player = p;
 		visited = false;
 		distanceValue = Integer.MAX_VALUE;
-		numbered = false;
-		values = new Double[2];
 		id = idCounter++;
 	}
 
@@ -98,27 +92,6 @@ public class GameNode implements Comparable<Object>{
 		return player.equals("R") || isErrState();
 	}
 
-	public boolean isNumbered(){
-		return numbered;
-	}
-
-	public void setNumbered(boolean b){
-		numbered = b;
-	}
-
-	//EXPANSION SET
-	public boolean isProbabilistic(){
-		return player.equals("P");
-	}
-	//EXPANSION SET
-  	public void setValue(int i, double val){
-  		values[i] = val;
-  	}
-  	//EXPANSION SET
-  	public Double[] getValues(){
-	    return values;
-	}
-
 	@Override
 	public int compareTo(Object u) {
 		if (u instanceof GameNode)
@@ -138,7 +111,7 @@ public class GameNode implements Comparable<Object>{
 		if (this.isErrState())
 			res = "ERR_STATE";
 		else
-			res = "SPEC: "+specState.toString()+", SYMBOL: "+(symbol.isFromSpec()?"S":(symbol.getLabel().equals("")?"#":"I"))+symbol.getLabel()+", IMP:"+impState.toString()+", PLAYER: "+player;
+			res = "{ "+specState.toString()+" , "+(symbol.isFromSpec()?"S_":(symbol.getLabel().equals("")?"#":"I_"))+symbol.getLabel()+" , "+impState.toString()+" , "+player+" }";
 		return res;
 	}
 
@@ -178,10 +151,8 @@ public class GameNode implements Comparable<Object>{
 			}
 				
 			if (specState == n.getSpecState() && impState == n.getImpState() && symbol.equals(n.getSymbol()) && player.equals(n.getPlayer())){
-				//System.out.println(this.hashCode()==n.hashCode());
 				return true;
 			}
-			//System.out.println(this.hashCode()==n.hashCode());
 		}
 		return false;
 	}

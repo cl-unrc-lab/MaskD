@@ -6,7 +6,7 @@ Process Memory {
     c2: BOOL; // the third bit
 	c3: BOOL; // fourth but
 	c4: BOOL; // fith bit
-    c5: BOOL; // sith bit
+    c5: BOOL; // sixth bit
     c6: BOOL; // seventh bit 
   
     
