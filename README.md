@@ -8,7 +8,16 @@ $ ant clean
 
 Run:
 $ cd bin
-$ ./maskD (then follow the help instructions). 
+$ ./maskD <options> <specification path> <implementation path>
+
+Options:
+      -nb : toggle if faulty model do not need to simulate nominal model
+      -det : use deterministic masking distance algorithm
+      -d : create dot file
+      -t : print error trace (uses det. algorithm)
+      -s : start simulation
+      -l : also treat deadlock as error state
+      -v : turn verbosity on
 
 Examples can be found
 in the directory: tests/
