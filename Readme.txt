@@ -1,4 +1,6 @@
-This is the source code and binaries distribution of the Masking Distance Tool MaskD,
+MaskD: A Tool for Measuring Masking Fault-Tolerance
+
+This is the source code and binaries distribution of the Masking Distance Tool MaskD. It requires ant for building.
 
 Compile:
 $ ant compile jar
@@ -20,9 +22,8 @@ Options:
       -v : turn verbosity on
 
 Examples can be found
-in the directory: tests/
-
-To replicate all experimental results (Fix-Point Algorithm) run the script: ./mask-test . For the Shortest Path Algorithm experiments run: ./mask-test-det
+in the directory: tests/standard/
 
 
-
+To replicate all experimental results (Fix-Point Algorithm) from the paper: "MaskD: A Tool for Measuring Masking Fault-Tolerance" run the script from bin: ./mask-test  
+For the Shortest Path Algorithm experiments run: ./mask-test-det
