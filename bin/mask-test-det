@@ -73,7 +73,7 @@ time ./maskD    -det ../tests/standard/nominal/brp/brpN5.test ../tests/standard/
 echo "5 chunk(s), 40 retransmission(s)"
 time ./maskD    -det ../tests/standard/nominal/brp/brpN5.test ../tests/standard/faulty/brp/brpN5M40.test
 echo "10 chunk(s), 1 retransmission(s)"
-time ./maskD    -det -det ../tests/standard/nominal/brp/brpN10.test ../tests/standard/faulty/brp/brpN10M1.test
+time ./maskD    -det ../tests/standard/nominal/brp/brpN10.test ../tests/standard/faulty/brp/brpN10M1.test
 echo "10 chunk(s), 5 retransmission(s)"
 time ./maskD    -det ../tests/standard/nominal/brp/brpN10.test ../tests/standard/faulty/brp/brpN10M5.test
 echo "10 chunk(s), 10 retransmission(s)"
