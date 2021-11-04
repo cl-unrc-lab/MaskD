@@ -1,6 +1,8 @@
 MaskD: A Tool for Measuring Masking Fault-Tolerance
 
-This is the source code and binaries distribution of the Masking Distance Tool MaskD. It requires ant for building.
+This is the source code and binaries distribution of the Masking Distance Tool MaskD.
+
+Apache Ant is required in order to build the tool.
 
 Compile:
 
