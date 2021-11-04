@@ -44,7 +44,7 @@ The structure of the repository is as follows:
 	
 	/tests : Contains case study models 
 
-A Demonstration Video is also contained in this repository.
+A Demonstration Video is also contained in this repository (Demo.mp4), you can download or you can watch the video in your favorite browser via this link: https://watch.screencastify.com/v/PPS70oPWLysCMDVYJ3Ap
 
 To replicate all experimental results (Fix-Point Algorithm) from the paper: "MaskD: A Tool for Measuring Masking Fault-Tolerance" run the script from bin: ./mask-test  
 	
