@@ -1,9 +1,6 @@
 package lang;
 
 
-/**
- * A class representing a reward on a expression
- */
 public class Reward extends Code{
 
     Integer value; // the reward corresponfing to exp

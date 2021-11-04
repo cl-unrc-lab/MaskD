@@ -2,7 +2,6 @@ package model;
 import java.util.*;
 
 //Utility class
-//TODO: make it generic
 public class Triple {
 	
 	private Object fst;

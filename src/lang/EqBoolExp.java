@@ -2,11 +2,6 @@ package lang;
 
 
 
-
-/**
- * A class that implements the boolean expresion int1 = int2
- */
-
 public class EqBoolExp extends BoolExp{
 
 Expression exp1; // the left int
@@ -16,12 +11,7 @@ boolean createBiimp; // is true in case of comparates two boolean expression,
     
 boolean isEnumerated; // is true in case of comparates two enumerated expression,
 String enumType; // Name of the enumerated type
-    
-/**
- * Constructor, it takes the two integers composing hte equality
- * @param	int1	the left integer
- * @param	int2	the right integer
- */
+
 public EqBoolExp(Expression int1, Expression int2){
 	super();
     this.exp1 = int1;

@@ -26,8 +26,6 @@ public class ProgramParser {
     }
     
     
-
-
     public Program parseAux(String NameFile){
         try {
             programFile = new FileReader(NameFile);
@@ -56,19 +54,11 @@ public class ProgramParser {
         
     }
 
-    /**
-     * 
-     * @return Return the symbols table of the model.
-     */
     public static SymbolsTable getSymbolsTable(){
     	return symbolsTable;
     }
     
  	
-
- 	/**
- 	 * Check types
- 	 */
  	private static Type checkTypes(Program prog) {
         TypeCheckerVisitor typeV = new TypeCheckerVisitor();
         prog.accept(typeV);

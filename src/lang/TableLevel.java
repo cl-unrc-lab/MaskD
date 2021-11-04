@@ -98,11 +98,7 @@ public class TableLevel {
 		return null;
 	}
 
-    
-    /**
-     * 
-     * @return Return a list with all names of boolean variables in the current level.
-     */
+
     public LinkedList<String> getBoolVarNames(){
     	LinkedList<String> varNames = new LinkedList<String>();
     	// Obtain all names of the global variables of type bool. 
@@ -114,11 +110,6 @@ public class TableLevel {
         return varNames;
 	}
 
-    
-    /**
-     *
-     * @return Return a list with all names of enumerated variables in the current level.
-     */
     public LinkedList<String> getEnumVarNames(){
     	LinkedList<String> varNames = new LinkedList<String>();
     	// Obtain all names of the global variables of type bool.
@@ -130,10 +121,6 @@ public class TableLevel {
         return varNames;
 	}
 
-    /**
-     * 
-     * @return Return a list with all names of integer variables in the current level.
-     */
     public LinkedList<String> getIntVarNames(){
     	LinkedList<String> varNames = new LinkedList<String>();
     	// Obtain all names of the global variables of type bool. 
@@ -145,10 +132,6 @@ public class TableLevel {
         return varNames;
 	}
 
-    /**
-     * 
-     * @return Return a list with all names of the boolean variables the process current level.
-     */
     public LinkedList<String> getBoolVarNamesProcesses(){
     	LinkedList<String> varNames = new LinkedList<String>();
     	Proc proc =null;
@@ -167,11 +150,6 @@ public class TableLevel {
         return varNames;
 	}
     
-    
-    /**
-     * 
-     * @return Return a list with all names of the integer variables the process current level.
-     */
     public LinkedList<String> getIntVarNamesProcesses(){
     	LinkedList<String> varNames = new LinkedList<String>();
     	Proc proc =null;
@@ -190,11 +168,6 @@ public class TableLevel {
         return varNames;
 	}
     
-	
-    /**
-     *
-     * @return Return a list with all names of the enumerated variables the process current level.
-     */
     public LinkedList<String> getEnumVarNamesProcesses(){
     	LinkedList<String> varNames = new LinkedList<String>();
     	Proc proc =null;

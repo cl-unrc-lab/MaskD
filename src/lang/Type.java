@@ -77,18 +77,11 @@ public enum Type {
        return false;
     }
 
-    /**
-     * @return The name of the type. 
-     *  e.g : Type.INT --> "INT", 
-     *        Type.ENUMERATED --> "<Name of the enumerated>",etc
-     **/
     public String getStringValue(){
         return stringValue;
     }
 
-    /**
-    * Set the name of the type only if is an Enumerated, if not rewrites the original types.
-    **/
+
     public void setStringValue(String val){
         switch(this) {
             case INT:

@@ -101,7 +101,6 @@ public class Model {
 			return false;
 		Pair transition = new Pair(from,to);
 		if (actions.get(transition) == null){
-			//System.out.println("a");
 			return false;
 		}
 		
@@ -143,8 +142,6 @@ public class Model {
 	public String createDot(boolean isImp){
 		String res = "digraph model {\n\n";
 		for (ModelState v : nodes){
-			//if (v.getIsFaulty())
-			//	res += "    STATE"+v.toStringDot()+" [color=\"red\"];\n";
 			for (ModelState u : succList.get(v)){
 				Pair edge = new Pair(v,u);
 				if (actions.get(edge) != null)
@@ -192,7 +189,6 @@ public class Model {
 		LinkedList<ModelState> fsts;
 		LinkedList<ModelState> snds;
 		LinkedList<String> lbls;
-		//LinkedList<Boolean> isFs;
 		LinkedList<Boolean> isTaus;
 
 

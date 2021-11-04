@@ -163,7 +163,6 @@ public class ModelState implements Comparable<Object>{
 						return false;
 				}
 			}
-			//System.out.println(this.hashCode()==n.hashCode());
 			return true;
 		}
 		return false;
@@ -175,7 +174,6 @@ public class ModelState implements Comparable<Object>{
 		n.state = new HashMap<String,Boolean>();
 		n.stateEnums = new HashMap<String,String>();
 		n.stateInts = new HashMap<String,Integer>();
-		//n.isFaulty = isFaulty;
 		for (Var v : model.getSharedVars()){
 			if (v.getType().isEnumerated())
 				n.getStateEnums().put(v.getName(),stateEnums.get(v.getName()));
@@ -265,7 +263,7 @@ public class ModelState implements Comparable<Object>{
 				if (((Var)e_.getExp1()).getType().isInt()){ //its an int
 					stInt.put(checkGlobalVar(v)?v.getName():procName+v.getName(), evalIntExpr(e_.getExp2(), procIndex));
 				}
-				else //its a bool*/
+				else //its a bool
 					st.put(checkGlobalVar(v)?v.getName():procName+v.getName(), ((ConsBoolExp)e_.getExp2()).getValue());
 		}
 	}
@@ -286,7 +284,6 @@ public class ModelState implements Comparable<Object>{
 		}
 		if (e instanceof NegIntExp){
 			NegIntExp e_ = (NegIntExp)e;
-			//return evalIntExpr(e_.getExp(),procIndex) * (-1);
 			return evalIntExpr(e_.getExp1(),procIndex) - evalIntExpr(e_.getExp2(),procIndex);
 		}
 		if (e instanceof MultIntExp){
@@ -304,35 +301,6 @@ public class ModelState implements Comparable<Object>{
 		return 0;
 	}
 
-	/*private Double evalDoubleExpr(Expression e, int procIndex){
-		if (e instanceof ConsDoubleExp){
-			ConsDoubleExp e_ = (ConsDoubleExp)e;
-			return e_.getValue();
-		}
-		if (e instanceof Var){
-			Var e_ = (Var)e;
-			return model.getConstants().get(e_.getName());
-		}
-		if (e instanceof NegIntExp){
-			NegIntExp e_ = (NegIntExp)e;
-			//return evalIntExpr(e_.getExp(),procIndex) * (-1);
-			return evalDoubleExpr(e_.getExp1(),procIndex) - evalDoubleExpr(e_.getExp2(),procIndex);
-		}
-		if (e instanceof MultIntExp){
-			MultIntExp e_ = (MultIntExp)e;
-			return evalDoubleExpr(e_.getExp1(),procIndex) * evalDoubleExpr(e_.getExp2(),procIndex);
-		}
-		if (e instanceof SumIntExp){
-			SumIntExp e_ = (SumIntExp)e;
-			return evalDoubleExpr(e_.getExp1(),procIndex) + evalDoubleExpr(e_.getExp2(),procIndex);
-		}
-		if (e instanceof DivIntExp){
-			SumIntExp e_ = (SumIntExp)e;
-			return evalDoubleExpr(e_.getExp1(),procIndex) / evalDoubleExpr(e_.getExp2(),procIndex);
-		}
-		return 0.0;
-	}*/
-
 	private boolean evalBoolExpr(Expression e, int procIndex){
 		if (e instanceof ConsBoolExp){
 			ConsBoolExp e_ = (ConsBoolExp)e;
@@ -342,8 +310,6 @@ public class ModelState implements Comparable<Object>{
 			Var e_ = (Var)e;
 			e_ = instanciateIfParam(e_,procIndex);
 			if (checkGlobalVar(e_)){
-				//System.out.println(e_.getName());
-				//System.out.println(state.get(e_.getName()));
 				return state.get(e_.getName());
 			}
 			else{

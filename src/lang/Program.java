@@ -6,13 +6,6 @@ import model.*;
 
 
 
-/**
-* This class defines a Faulty program, it provides the basic structures: a list of enumTypes,  
-* a collection of global variables( internally separating in bool and int variables),
-* a collection of channels( internally separating in bool and int channels),
-* and a collection of all processes defined and invocated.
-* @author Ceci
-**/
 
 public class Program extends ProgramNode{
     LinkedList<EnumType> enumTypes;
@@ -22,12 +15,6 @@ public class Program extends ProgramNode{
     int maxEnumSize;
     String name;
     
-    /**  GlobalVars
-     * @param gVars: Collection of all global variables classified by their type.
-     * @param channels: Collection of all global channels classified by their type.
-     * @param process: Collection of all processes defined.
-     * @param mainProgram: Collection of all process intances with their respective parameters.
-     **/
     public Program(GlobalVarCollection gVars, ProcessCollection process, Main mainProgram){
         this.enumTypes = new LinkedList<EnumType>();
         this.globalVars = gVars;
@@ -36,10 +23,7 @@ public class Program extends ProgramNode{
         this.maxEnumSize = 0;
     }
     
-    /** !EnumTypes & !GlobalVars & !Channels
-     * @param process: Collection of all processes defined.
-     * @param mainProgram: Collection of all process intances with their respective parameters.
-     **/
+
     public Program( ProcessCollection process, Main mainProgram){
         this.enumTypes = new LinkedList<EnumType>();
         this.globalVars = new GlobalVarCollection();
@@ -47,13 +31,6 @@ public class Program extends ProgramNode{
         this.mainProgram = mainProgram;
     }
     
-    
-    /** EnumTypes + GlobalVars 
-     * @param enumList: List of EnumTypes
-     * @param gVars: Collection of all global variables classified by their type.
-     * @param process: Collection of all processes defined.
-     * @param mainProgram: Collection of all process intances with their respective parameters.
-     **/
     public Program(LinkedList<EnumType> enumList, GlobalVarCollection gVars, ProcessCollection process, Main mainProgram){
         this.enumTypes = enumList;
         this.globalVars = gVars;
@@ -70,12 +47,6 @@ public class Program extends ProgramNode{
         }
     }
     
-    
-    /** EnumTypes 
-     * @param enumList: List of EnumTypes
-     * @param process: Collection of all processes defined.
-     * @param mainProgram: Collection of all process intances with their respective parameters.
-     **/
     public Program(LinkedList<EnumType> enumList,ProcessCollection process, Main mainProgram){
         this.enumTypes = enumList;
         this.globalVars = new GlobalVarCollection();

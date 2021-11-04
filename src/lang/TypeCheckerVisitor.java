@@ -11,10 +11,7 @@ public class TypeCheckerVisitor implements LangVisitor{
 	private LinkedList<Error> listError;
 	private SymbolsTable table;
     private EnumType currentEnumeratedType;
-    
-	/**
-	 * Basic constructor
-	 */
+
 	public TypeCheckerVisitor(){
 		type = Type.UNDEFINED;
 	    listError = new LinkedList<Error>();
@@ -26,7 +23,6 @@ public class TypeCheckerVisitor implements LangVisitor{
 	public void visit(Program a){
 		
 		 
-		//Type eType = Type.ERROR;
 		Type eType = Type.UNDEFINED;
 		EnumType enumT;
         for(int i=0;i< a.enumTypes.size();i++){
@@ -63,7 +59,6 @@ public class TypeCheckerVisitor implements LangVisitor{
     public void visit(EnumType a){
         
         boolean added =table.addSymbol(a);
-        //System.out.println("----------------> enum declaration " + a.getName() + " const 0 "+ a.getCons(0) + " - size = "+ a.getSize());
         
         if(!added){
             type = Type.ERROR;
@@ -236,7 +231,6 @@ public class TypeCheckerVisitor implements LangVisitor{
 		expr.accept(this);
 		exprT = this.getType();
 		
-		//Type assigListT = Type.BOOL; //By default all branches are BOOL type 
 		boolean correct =true;
 		for(int i=0;i<aList.size();i++){
 			aList.get(i).accept(this);
@@ -256,10 +250,6 @@ public class TypeCheckerVisitor implements LangVisitor{
 
 	public void visit(ProbAssign a){
 		LinkedList<Code> aList = a.getAssigns();
-		//Expression expr = a.getExp();
-		//Type exprT;
-		//expr.accept(this);
-		//exprT = this.getType();
 		boolean correct =true;
 		for(int i=0;i<aList.size();i++){
 			aList.get(i).accept(this);
@@ -269,7 +259,6 @@ public class TypeCheckerVisitor implements LangVisitor{
 		}
 		
 		
-		//if( correct && exprT == Type.DOUBLE ){
 		if( correct ){
 			type = Type.BOOL;
 		}
@@ -286,7 +275,6 @@ public class TypeCheckerVisitor implements LangVisitor{
 		Type varT = this.getType();
         String enumExp1 = null;
         String enumExp2 = null;
-        //System.out.println(" -------------------Visiting VarAssign------ Var= " + var.getName() + "-- Type:"  + var.getEnumName() + " --------- \n");
         
         
         Type exprT;
@@ -303,10 +291,6 @@ public class TypeCheckerVisitor implements LangVisitor{
             enumExp2 = currentEnumeratedType.getName();
         }
             
-        //System.out.println(" ------------------ Visiting VarAssign------ expr= " + "-- TypEEEEEE: "  + exprT + " --------- \n");
-            
-        
-		
         
 		if( (varT.isBoolean() && exprT.isBoolean()) || (varT.isInt() && exprT.isInt() ) || ((varT.isEnumerated() && exprT.isEnumerated() && ( enumExp1.equals(enumExp2)) )) ){
 			type = varT;
@@ -341,7 +325,6 @@ public class TypeCheckerVisitor implements LangVisitor{
                 EnumType enumT = initialLevel.getEnumeratedType(a.getEnumName()); //search the enumerated type.
                 if(enumT!=null){
                     a.setEnumType(enumT); //set the complete information of the type.
-                    //System.out.println("VISITING var  declaration " + a.getName() + " type "+ a.getEnumName() + " -- etype " + enumT.getName() + " - size = "+ enumT.getSize());
                 }
                 else{
                     type = Type.ERROR;
@@ -389,7 +372,6 @@ public class TypeCheckerVisitor implements LangVisitor{
 					        type = var.getType();
 					        a.setType(var.getType());
                             a.setEnumName(var.getEnumName());
-                            //System.out.println("----------------> Var Founded = " + a.getName() + " -- in Enumerated Type " + var.getEnumName() + "Type: " + var.getType().getStringValue() );
                             
                             TableLevel initialLevel = table.getLevelSymbols(0);
                             this.currentEnumeratedType = initialLevel.getEnumeratedType(var.getEnumName());//set the enumerated type information of the current assignation o comparison
@@ -399,14 +381,11 @@ public class TypeCheckerVisitor implements LangVisitor{
 			        }
                     
                     if(!found){//search if its a constant of the current enumerated type
-                        //System.out.println("----------------> VAR Not found -----Searching constant = " + this.currentEnumeratedType );
 
                         if(this.currentEnumeratedType!=null){
-                            //System.out.println("----------------> Searching constant = " + a.getName() + " -- in Enumerated Type " + this.currentEnumeratedType.getName() );
 
                             found = this.currentEnumeratedType.existConstant(a.getName());
                             if(found){
-                                //System.out.println("----------------> Exist constant!!" + a.getName()  );
 
                                 type= Type.ENUMERATED;
                                 a.setType(type);
@@ -430,7 +409,6 @@ public class TypeCheckerVisitor implements LangVisitor{
 			}
 		}
 		
-		//System.out.println("----------------> FINAL vble" + a.getName() + " -- type: " + a.getType().toString() );
         
         
         
@@ -574,22 +552,16 @@ public class TypeCheckerVisitor implements LangVisitor{
             tEnum2 = this.currentEnumeratedType.getName();
         }
        
-        //System.out.println("operation type First Op " + typeExp1.toString() + "type second op " +  typeExp2.toString() );
 		
 	    if(typeExp1.isInt() && typeExp2.isInt() ){
-	    	//System.out.println(" ------> INT first op" + typeExp1.toString() + "type second op " +  typeExp2.toString() );
-    		
 	    	type= Type.BOOL;
 	    }
 	    else{
 	    	if(typeExp1.isDouble() && typeExp2.isDouble() ){
-		    	//System.out.println(" ------> INT first op" + typeExp1.toString() + "type second op " +  typeExp2.toString() );
-	    		
 		    	type= Type.BOOL;
 		    }
 		    else{
 		    	if(typeExp1.isBoolean() && typeExp2.isBoolean() ){
-		    		//System.out.println(" ------> BOOLEAN first op" + typeExp1.toString() + "type second op " +  typeExp2.toString() );
 		    		a.setCreateBiimp(true); //marks to create the biimplication for boolean expression 
 			    	type= Type.BOOL;
 			    }
@@ -598,7 +570,6 @@ public class TypeCheckerVisitor implements LangVisitor{
 	                if(typeExp1.isEnumerated() && typeExp2.isEnumerated() ){
 	                    
 	                    if(tEnum1.equals(tEnum2)){
-	                       // System.out.println(" ------> ENUMERATED first op" + typeExp1.toString() + "type second op " +  typeExp2.toString() + "EnumType:" + tEnum2);
 	                        a.setIsEnumerated(true); //mark that comparation involves 2 enum expressions.
 	                        a.setEnumType(tEnum2);
 	                        type= Type.BOOL;
@@ -608,7 +579,6 @@ public class TypeCheckerVisitor implements LangVisitor{
 	                    }
 	                }
 	                else{
-	                    //System.out.println(" ------> ERROR first op" + typeExp1.toString() + "type second op " +  typeExp2.toString() );
 	                    type = Type.ERROR;
 	                    listError.add(new Error("ErrorType - == operator: Expected the same types for Comparation."));
 	                }
@@ -718,9 +688,7 @@ public class TypeCheckerVisitor implements LangVisitor{
                 EnumType enumT = initialLevel.getEnumeratedType(a.getEnumName()); //search the enumerated type.
                 
                 if(enumT!=null){
-                    a.setEnumType(enumT); //set the complete information of the type.
-                    //System.out.println("Parameter declaration " + paramName + " type "+ a.getEnumName() + " -- etype " + enumT.getName() + " - size = "+ enumT.getSize());
-                    
+                    a.setEnumType(enumT); //set the complete information of the type.                    
                 }
                 else{
                     
@@ -817,19 +785,8 @@ public class TypeCheckerVisitor implements LangVisitor{
                                 String declName = par.getDeclarationName();
                                 
                                 Type declT= par.getType();
-                               /* System.out.println("Parameter declaration " + declName + " type "+ declT.toString() );
-                                
-                                if(par.getEnumType()!=null && declT.isEnumerated()){
-                                   System.out.println(" enumerated: " +  par.getEnumName()+ " -- etype: " + par.getEnumType().getName() + " - size = "+ par.getEnumType().getSize());
-                                }*/
-                                
+                               
                                 Var gVar = (Var)invkParametersList.get(j);
-                                /*System.out.println("Parameter invok: " + gVar.getName() + " type: "+ gVar.getType().toString() );
-                                
-                                if(gVar.getEnumType()!=null && gVar.getType().isEnumerated()){
-                                     System.out.println( " enumerated = " + gVar.getEnumName() + " -- etype " + gVar.getEnumType().getName() + " - size = "+ gVar.getEnumType().getSize()+ " \n\n\n");
-                                }*/
-                                
                                 
                                 if( gVar == null){
                                     listError.add(new Error("ErrorType1 - Invocation of process : "+ procNam +" - Type of parameters does not match its definition."));
@@ -881,35 +838,18 @@ public class TypeCheckerVisitor implements LangVisitor{
         }
 	}
 	
-	/**
-	 * Return the type involved in the object.
-	 * @return type 
-	 */
     public Type getType(){
     	return type;
     }
     
-    /**
-	 * Return the SymbolsTable involved in the program
-	 * @return type 
-	 */
     public SymbolsTable getSymbolTable(){
     	return table;
     }
 
-    /**
-	 * Return the List of errors
-	 * @return type 
-	 */
     public LinkedList<Error> getErrorList(){
     	return listError;
     }
     
-    
-    /**
-	 * Calculates and set in each enumType the number of instances of this type of the program.
-	 * 
-	 */
     
     private void calculatesEnumVars(Program p){
     

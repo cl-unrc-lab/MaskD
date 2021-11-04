@@ -10,12 +10,6 @@ public class AndBoolExp extends BoolExp{
 	Expression exp2; // the right expression
 	
 
-    
-    /**
-     * Basic constructor for the class
-     * @param 	exp1	the left expression
-     * @param	epx2	the right expression
-     */
     public AndBoolExp(Expression exp1, Expression exp2){
     	
         this.exp1 = exp1;

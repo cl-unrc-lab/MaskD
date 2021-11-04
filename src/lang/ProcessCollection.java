@@ -20,11 +20,6 @@ public class ProcessCollection extends ProgramNode {
 	
 	}
 	
-	
-	 /**
-     * Adds a  process to the list
-     * @param	proc 	the new proc
-     */
     public void addProcess(Proc proc){
     	processList.add(proc);
     	totalIntVars += proc.getNumVarInt();
@@ -71,10 +66,8 @@ public class ProcessCollection extends ProgramNode {
 		
 		int i = 0;
 		
-		//System.out.println("  ++++++++++++++++++++++++++++++++++++++++++++++"  );
 		
 		while ( i < processList.size() && !found ){
-			//System.out.println("  -- process Name :" + processList.get(i).getName() + " - process searched :" + name );
 			
 			if (processList.get(i).getName().equals(name)){
 				proc = processList.get(i);
@@ -82,8 +75,6 @@ public class ProcessCollection extends ProgramNode {
 			}
 			i++;
 	    }
-		//System.out.println("  -- process Name returned :" + proc.getName()  );
-		//System.out.println("  ++++++++++++++++++++++++++++++++++++++++++++++"  );
 		
 		return proc;
 		

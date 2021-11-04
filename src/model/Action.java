@@ -108,7 +108,6 @@ public class Action {
 		if (o instanceof Action){
 			Action a = (Action)o;
 			if ( label.equals(a.getLabel()) && isFaulty.equals(a.isFaulty()) && isTau.equals(a.isTau()) && isFromSpec.equals(a.isFromSpec())){
-				//System.out.println(this.hashCode()==a.hashCode());
 				return true;
 			}
 		}

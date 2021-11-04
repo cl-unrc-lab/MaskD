@@ -3,10 +3,8 @@ package lang;
 import java.util.*;
 
 public class Branch extends ProgramNode {
-	    //BoolExp guard; // the guard of the branch
 	    Expression guard; // the guard of the branch
 	    LinkedList<Code> assignList;
-	    //Code code; // the code of the branch
 	    boolean isFaulty; // is the branch faulty?
 	    boolean isTau;  // is the branch internal?
 	    boolean isProb;

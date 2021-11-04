@@ -30,30 +30,14 @@ public class GlobalVarCollection extends ProgramNode{
 	}
 	
     
-	/**
-	 * Precondition: var should be of type Bool
-	 * @param v
-	 * @return true if the variable was added , false otherwise.
-	 */
 	public boolean addGlobalBoolVar(Var v){
 		return boolVars.add(v);
 	}
 	
-	
-	/**
-	 * Precondition: var should be of type Int
-	 * @param v
-	 * @return true if the variable was added , false otherwise.
-	 */
 	public boolean addGlobalIntVar(Var v){
 		return intVars.add(v);
 	}
 	
-	/**
-	 * Precondition: var should be of type Enumerated
-	 * @param v
-	 * @return true if the variable was added , false otherwise.
-	 */
 	public boolean addGlobalEnumVar(Var var){
         return enumVars.add(var);
 	}

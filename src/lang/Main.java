@@ -21,11 +21,7 @@ public class Main extends ProgramNode{
 		
 	}
 	
-	/**
-	 * 
-	 * @param name
-	 * @return the type of the process with that name, null otherwise.
-	 */
+
 	public String getProcessType(String name){
 		boolean found =false;
 		int i = 0;

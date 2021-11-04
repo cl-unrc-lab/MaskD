@@ -2,20 +2,10 @@ package lang;
 
 
 
-
-/**
- * Class implementing the comparation int1 <= int2
- */
-
 public class LessOrEqualBoolExp extends BoolExp{
 	Expression exp1; // left int
 	Expression exp2; // right int
 
-    /**
-     * Constructor, it takes the two integer in the comparison as parameters
-     * @param	int1	left integer
-     * @param	int2	right integer
-     */
     public LessOrEqualBoolExp(Expression int1, Expression int2){
     	super();
         this.exp1 = int1;

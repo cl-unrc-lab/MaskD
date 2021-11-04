@@ -9,12 +9,7 @@ public class Var extends Expression {
 	boolean isDeclaration;
     private EnumType enumType;
 
-		
-	/**
-	 * 
-	 * @param name
-	 * @param t
-	 */
+
 	public Var(String name, Type t){
 		this.name = name;
         Type tVar;
@@ -23,7 +18,6 @@ public class Var extends Expression {
             tVar= Type.ENUMERATED;
             tVar.setStringValue(t.getStringValue());
             this.type = tVar;
-    //System.out.println("in Var ---->  declaration " + this.name + " type "+ this.type.toString() + " enum " + this.type.getStringValue()+ " -- enumName: " + this.enumName);
             
         }
         else{
@@ -35,10 +29,7 @@ public class Var extends Expression {
         this.enumType=null;
 	}
 	
-	/**
-	 * 
-	 * @param name  
-	 */
+
 	public Var(String name){
 		this.name = name;
 		this.type = Type.UNDEFINED;
@@ -49,28 +40,19 @@ public class Var extends Expression {
 
 	}
 
-	/**
-	 * 
-	 * @return Return the type of the variable.
-	 */
+
 	public Type getType(){
 		
 		return this.type;
 	}
 	
-    /**
-	 *
-	 * @return Return the enumerated type of the variable.
-	 */
+
 	public EnumType getEnumType(){
 		
 		return this.enumType;
 	}
            
-    /**
-     *
-     * @return Return the enumerated name of the variable.
-     */
+
     public String getEnumName(){
         return enumName;
     }
@@ -79,26 +61,15 @@ public class Var extends Expression {
     	return this.isDeclaration;
     }
 
-	
-	/**
-	 * 
-	 * @return Return the name of the variable.
-	 */
     public String getName(){
 		
 		return name;
 	}
     
     
-    /**
-	 * 
-	 * @return Set the type of the variable.
-	 */
 	public void setType(Type t){
 		Type tVar;
-        if(t.isEnumerated()){
-            //this.enumName = new String(t.getStringValue());
-            
+        if(t.isEnumerated()){            
             tVar= Type.ENUMERATED;
             tVar.setStringValue(t.getStringValue());
             this.type = tVar;
@@ -109,29 +80,16 @@ public class Var extends Expression {
 	}
 	
     
-    
-    /**
-	 *
-	 * Set the enumerated Type of the variable.
-	 */
 	public void setEnumType(EnumType t){
 		
 		this.enumType = t;
 	}
     
-	/**
-	 * 
-	 * @return Set the name of the variable.
-	 */
     public void setName(String n){
 		
 		this.name = n;
 	}
     
-    /**
-	 *
-	 * Set the enumerated name of the variable.
-	 */
     public void setEnumName(String n){
 		
 		this.enumName = n;

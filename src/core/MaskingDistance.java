@@ -272,7 +272,6 @@ public class MaskingDistance{
     }
 
     private double calculateDistanceDijsktra(){
-        // We use dijsktra's algorithm to find the shortest path to an error state
         System.out.println("Calculating Distance...");
 
         g.getInitial().setDistanceValue(0);

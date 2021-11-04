@@ -241,12 +241,6 @@ public class Proc extends ProgramNode {
 	}
     
     
-    /**
-     *
-     * @param processName Name of the process.
-     * @return return the list with the boolean parameters of the process with that name, an empty list otherwise.-
-     */
-    
     public LinkedList<Expression> getInvkBoolParamList(String processName){
         
         LinkedList<Expression> boolPar = new LinkedList<Expression>();
@@ -262,12 +256,6 @@ public class Proc extends ProgramNode {
         return boolPar;
 	}
     
-    
-    /**
-     *
-     * @param processName Name of the process.
-     * @return return the list with the integer parameters of the process with that name, an empty list otherwise.-
-     */
     
     public LinkedList<Expression> getInvkIntParamList(String processName){
         
@@ -285,13 +273,6 @@ public class Proc extends ProgramNode {
         return intPar;
 	}
     
-    
-    
-    /**
-     *
-     * @param i ith intance position
-     * @return return the name of the ith instance, null if not exist.-
-     */
     public String getProcessInstanceName(int i){
     	
     	if ( i < processInstanceNames.size()){
@@ -366,13 +347,7 @@ public class Proc extends ProgramNode {
     	paramList = parL;
     }
     
-    
-    /**
-     * Return the list of all names of the boolean variables involved of this
-     *  process (according the instance name of the process) :
-     * "Process_instanceName" + "." + "VariableName"
-     * @return
-     */                       
+                        
     public LinkedList<String> getBoolVarNamesProcessInstances(){
     	LinkedList<String> varNames = new LinkedList<String>();
     	
@@ -386,13 +361,6 @@ public class Proc extends ProgramNode {
     }
     
     
-    
-    /**
-     * Return the list of all names of the integer variables involved of this
-     *  process (according the instance name of the process) :
-     * "Process_instanceName" + "." + "VariableName"
-     * @return
-     */
     public LinkedList<String> getIntVarNamesProcessInstances(){
     	LinkedList<String> varNames = new LinkedList<String>();
     	
@@ -406,12 +374,6 @@ public class Proc extends ProgramNode {
     	return varNames;
     }
     
-    /**
-     * Return the list of all names of the enumerated variables involved of this
-     *  process (according the instance name of the process) :
-     * "Process_instanceName" + "." + "VariableName"
-     * @return
-     */
     public LinkedList<String> getEnumVarNamesProcessInstances(){
     	LinkedList<String> varNames = new LinkedList<String>();
     	
@@ -425,10 +387,6 @@ public class Proc extends ProgramNode {
     	return varNames;
     }
     
-    /**
-     * @return Return the total number of enumVars of a single Process.
-     * 
-     */
     public int getNumEnumVarsProcess(String enumName){
         
         int numberVars =0;
@@ -451,11 +409,6 @@ public class Proc extends ProgramNode {
     	return (numberVars+numberParam);
     }
     
-    
-    /**
-     * @return Return the total number of enumVars according the number of process instances.
-     *
-     */
     public int getNumEnumProcessInstances(String enumName){
         
         
