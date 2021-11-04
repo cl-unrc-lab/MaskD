@@ -21,9 +21,14 @@ Options:
       -l : also treat deadlock as error state
       -v : turn verbosity on
 
-Examples can be found
-in the directory: tests/standard/
+The structure of the repository is as follows:
+	bin : Contains the binaries
+	doc : Contains the grammar of the MaskD language
+	lib : Contains external libraries
+	src : Contains the source code
+	tests : Contains case study models 
 
+A Demonstration Video is also contained in this repository.
 
 To replicate all experimental results (Fix-Point Algorithm) from the paper: "MaskD: A Tool for Measuring Masking Fault-Tolerance" run the script from bin: ./mask-test  
 For the Shortest Path Algorithm experiments run: ./mask-test-det
