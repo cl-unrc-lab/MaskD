@@ -1,0 +1,4 @@
+11/25/2021:
+* A .deb package for the installation of ant is included.
+* Descriptions for the case studies and experiments are included in the doc directory (taken from the paper's appendix).
+* A warning on the most time-expensive experiments is added to the readme.
