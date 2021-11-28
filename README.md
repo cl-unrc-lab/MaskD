@@ -3,6 +3,10 @@ MaskD: A Tool for Measuring Masking Fault-Tolerance
 This is the source code and binaries distribution of the Masking Distance Tool MaskD.
 
 Apache Ant is required in order to build the tool. The is a .deb package included in this repository.
+You can install ant by running:
+
+	$ sudo dpkg -i ant_1.10.11-1_all.deb 
+
 
 Compile:
 
