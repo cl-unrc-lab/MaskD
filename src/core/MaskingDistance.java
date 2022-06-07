@@ -33,6 +33,10 @@ public class MaskingDistance{
         System.out.println("Building Models...");
         spec = pSpec.toLTS(true);
         imp = pImp.toLTS(false);
+        if (imp.getIsWeak()){
+            spec.setIsWeak(true);
+            System.out.println("Saturating Models...");
+        }
         spec.saturate();
         imp.saturate();
         if (verbose){
@@ -58,7 +62,7 @@ public class MaskingDistance{
         while(!iterSet.isEmpty()){
             GameNode curr = iterSet.pollFirst();
             
-            if (deadlockIsError && imp.getSuccessors(curr.getImpState()).size() == 1 && curr.getPlayer() == "R"){ // special deadlock case
+            if (deadlockIsError && imp.getSuccessors(curr.getImpState()).size() == 0 && curr.getPlayer() == "R"){ // special deadlock case
                     Action preErr = new Action("DEADLOCK_ERR", false, false, false);
                     GameNode curr_ = new GameNode(curr.getSpecState(),curr.getImpState(),preErr,"V");
                     g.addNode(curr_);
@@ -236,6 +240,33 @@ public class MaskingDistance{
         }
         return max;
     }
+
+    private GameNode strategyR (GameNode n){
+        int min = Integer.MAX_VALUE;
+        GameNode strategy = null;
+        for (GameNode m : g.getSuccessors(n)){
+            if (m.getDistanceValue() < min){
+                min = m.getDistanceValue();
+                strategy = m;
+            }
+            if (m.getDistanceValue() == min && m.getDistanceToError() < strategy.getDistanceToError()){
+               strategy = m; 
+            }
+        }
+        return strategy;
+    }
+
+    private GameNode strategyV (GameNode n){
+        int max = Integer.MIN_VALUE;
+        GameNode strategy = null;
+        for (GameNode m : g.getSuccessors(n)){
+            if (m.getDistanceValue() > max){
+                max = m.getDistanceValue();
+                strategy = m;
+            }
+        }
+        return strategy;
+    }
     
     public double calculateDistanceBFS(){
         System.out.println("Calculating Distance...");
@@ -271,7 +302,7 @@ public class MaskingDistance{
         return res;
     }
 
-    private double calculateDistanceDijsktra(){
+    /*private double calculateDistanceDijsktra(){
         System.out.println("Calculating Distance...");
 
         g.getInitial().setDistanceValue(0);
@@ -307,10 +338,10 @@ public class MaskingDistance{
         
         double res= Math.round((double)1/(1+minDistance) * Math.pow(10, 3)) / Math.pow(10, 3);
         return res;
-    }
+    }*/
 
     //Only works together with -det
-    public void printTraceToError(){
+    /*public void printTraceToError(){
         System.out.println("Masking Distance: "+calculateDistanceDijsktra());
         System.out.println("\n·····ERROR PATH·····\n");
         GameNode curr = g.getErrState();
@@ -319,6 +350,44 @@ public class MaskingDistance{
             System.out.println(i+". "+curr.toString());
             curr = curr.getPreviousNodeInPath();
             i++;
+        }
+    }*/
+
+    public void printTraceToError(){
+        if (g.getInitial().getDistanceValue() == Integer.MAX_VALUE){
+            System.out.println("No trace to error!");
+            return;
+        }
+        computeDistancesToError();
+        System.out.println("\n·····ERROR PATH·····\n");
+        GameNode curr = g.getInitial();
+        int i = 0;
+        while (curr != g.getErrState()){
+            System.out.println(i+". "+curr.toString());
+            //System.out.println(i+". "+curr.getDistanceValue());
+            if (curr.isVerifier())
+                curr = strategyV(curr);
+            else
+                curr = strategyR(curr);
+            i++;
+        }
+    }
+
+    private void computeDistancesToError(){
+        g.getErrState().setDistanceToError(0);
+        
+        LinkedList<GameNode> q = new LinkedList<GameNode>() ;
+        q.addFirst(g.getErrState());
+        while (!q.isEmpty()) {
+            GameNode v = q.getFirst();
+            q.removeFirst();
+            for (GameNode adj : g.getPredecessors(v)) {
+                if (!adj.getVisited()){
+                    adj.setVisited(true);
+                    adj.setDistanceToError(v.getDistanceToError() + 1);
+                    q.addLast(adj);
+                }
+            }
         }
     }
 

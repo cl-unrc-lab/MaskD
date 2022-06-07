@@ -50,18 +50,16 @@ public class MainMD {
             Program imp = prog.parseAux(args[args.length - 1]);
             try{
               MaskingDistance md = new MaskingDistance(spec,imp,deadlockIsError,noBisim,verbose);
-              if (printTrace){
-                  md.printTraceToError();
+              if (startSimulation){
+                  md.simulateGame();
               }
               else{
-                if (startSimulation){
-                    md.simulateGame();
-                }
-                else{
-                  if (!deterministic)
-                    System.out.println("Masking Distance: "+md.calculateDistance());
-                  else
-                    System.out.println("Masking Distance: "+md.calculateDistanceBFS());
+                if (!deterministic)
+                  System.out.println("Masking Distance: "+md.calculateDistance());
+                else
+                  System.out.println("Masking Distance: "+md.calculateDistanceBFS());
+                if (printTrace){
+                  md.printTraceToError();
                 }
               }
               if (toDot)

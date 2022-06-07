@@ -42,6 +42,10 @@ public class Model {
 		isWeak = b;
 	}
 
+	public boolean getIsWeak(){
+		return isWeak;
+	}
+
 	public ModelState getInitial(){
 		return initial;
 	}
@@ -179,11 +183,11 @@ public class Model {
 
 	public void saturate(){
 		//Add tau self-loops
+		if (!isWeak)
+			return;
 		for (ModelState p : nodes){
 			addEdge(p,p,new Action("&",false,true,isSpec)); // p -> p is internal
 		}
-		if (!isWeak)
-			return;
 		boolean change = true;
 		//this lists will share the same size
 		LinkedList<ModelState> fsts;

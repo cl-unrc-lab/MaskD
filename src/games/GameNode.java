@@ -12,7 +12,7 @@ public class GameNode implements Comparable<Object>{
 	boolean mask; // True if the player has to mask this.symbol
 	boolean visited; // Utility for graph traversal algorithms
 	int distanceValue; // Value of the game for this node
-	GameNode previousNodeInPath; // Previous Node in Shortest path to errState
+	int distanceToError; // Common distance to error
 	int id;
 	private static int idCounter = 0;
 
@@ -76,12 +76,12 @@ public class GameNode implements Comparable<Object>{
 		distanceValue = d;
 	}
 
-	public GameNode getPreviousNodeInPath(){
-		return previousNodeInPath;
+	public int getDistanceToError(){
+		return distanceToError;
 	}
 
-	public void setPreviousNodeInPath(GameNode prev){
-		previousNodeInPath = prev;
+	public void setDistanceToError(int d){
+		distanceToError = d;
 	}
 
 	public boolean isVerifier(){
