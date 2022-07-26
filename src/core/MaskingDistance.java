@@ -371,6 +371,7 @@ public class MaskingDistance{
                 curr = strategyR(curr);
             i++;
         }
+        System.out.println(i+". "+curr.toString());
     }
 
     private void computeDistancesToError(){
