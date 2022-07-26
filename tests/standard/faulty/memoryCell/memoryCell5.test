@@ -1,35 +1,34 @@
 Process Memory {
-    w: BOOL; // the last value written
 	r: BOOL; // the value we can read from the memory
-    c0: BOOL; // the first bit
-    c1: BOOL; // the second bit
-    c2: BOOL; // the third bit
-	c3: BOOL; // fourth but
-	c4: BOOL; // fith bit
+    b0: BOOL; // the first bit
+    b1: BOOL; // the second bit
+    b2: BOOL; // the third bit
+	b3: BOOL; // fourth but
+	b4: BOOL; // fith bit
   
     
-    Initial: w && c0 && c1 && c2 && c3 && c4 && r;
+    Initial: b0 && b1 && b2 && b3 && b4 && r;
 	
-	[write1] true -> w=true, c0=true, c1=true, c2=true, c3=true, c4=true, r=true;// memory change accordingly
-	[write0] true -> w=false, c0=false, c1=false, c2=false, c3=false, c4=false, r=false;// memory change accordingly
+	[write1] true -> b0=true, b1=true, b2=true, b3=true, b4=true, r=true;// memory change accordingly
+	[write0] true -> b0=false, b1=false, b2=false, b3=false, b4=false, r=false;// memory change accordingly
 	
 	[read0] !r -> r = r;
 	[read1] r -> r = r;
 
-	[fail1] faulty true -> c0=!c0, r=(!c0&&c1 &&c2)||(!c0&&c2&&c3)||(!c0&&c3&&c4)||(!c0&&c1&&c3)||(!c0&&c1&&c4)||(c1&&c3&&c4)||(c1&&c2&&c4)||(c2&&c3&&c4)||(c1&&c2&&c3)||(!c0&&c2&&c4); // a bit is changed, its a fault
+	[fault1] faulty true -> b0=!b0, r=(!b0&&b1 &&b2)||(!b0&&b2&&b3)||(!b0&&b3&&b4)||(!b0&&b1&&b3)||(!b0&&b1&&b4)||(b1&&b3&&b4)||(b1&&b2&&b4)||(b2&&b3&&b4)||(b1&&b2&&b3)||(!b0&&b2&&b4); // a bit is changed, its a fault
 	
-	[fail2] faulty true -> c1=!c1, r=(c0&&!c1 &&c2)||(c0&&c2&&c3)||(c0&&c3&&c4)||(c0&&!c1&&c3)||(c0&&!c1&&c4)||(!c1&&c3&&c4)||(!c1&&c2&&c4)||(c2&&c3&&c4)||(!c1&&c2&&c3)||(c0&&c2&&c4); // similar to above
+	[fault2] faulty true -> b1=!b1, r=(b0&&!b1 &&b2)||(b0&&b2&&b3)||(b0&&b3&&b4)||(b0&&!b1&&b3)||(b0&&!b1&&b4)||(!b1&&b3&&b4)||(!b1&&b2&&b4)||(b2&&b3&&b4)||(!b1&&b2&&b3)||(b0&&b2&&b4); // similar to above
 	
-	[fail3] faulty true -> c2=!c2, r=(c0&&c1 &&!c2)||(c0&&!c2&&c3)||(c0&&c3&&c4)||(c0&&c1&&c3)||(c0&&c1&&c4)||(c1&&c3&&c4)||(c1&&!c2&&c4)||(!c2&&c3&&c4)||(c1&&!c2&&c3)||(c0&&!c2&&c4); // similar to above
+	[fault3] faulty true -> b2=!b2, r=(b0&&b1 &&!b2)||(b0&&!b2&&b3)||(b0&&b3&&b4)||(b0&&b1&&b3)||(b0&&b1&&b4)||(b1&&b3&&b4)||(b1&&!b2&&b4)||(!b2&&b3&&b4)||(b1&&!b2&&b3)||(b0&&!b2&&b4); // similar to above
     
-    [fail4] faulty true -> c3=!c3, r=(c0&&c1 &&c2)||(c0&&c2&&!c3)||(c0&&!c3&&c4)||(c0&&c1&&!c3)||(c0&&c1&&c4)||(c1&&!c3&&c4)||(c1&&c2&&c4)||(c2&&!c3&&c4)||(c1&&c2&&!c3)||(c0&&c2&&c4);
+    [fault4] faulty true -> b3=!b3, r=(b0&&b1 &&b2)||(b0&&b2&&!b3)||(b0&&!b3&&b4)||(b0&&b1&&!b3)||(b0&&b1&&b4)||(b1&&!b3&&b4)||(b1&&b2&&b4)||(b2&&!b3&&b4)||(b1&&b2&&!b3)||(b0&&b2&&b4);
     
-	[fail5] faulty true -> c4=!c4, r=(c0&&c1 &&c2)||(c0&&c2&&c3)||(c0&&c3&&!c4)||(c0&&c1&&c3)||(c0&&c1&&!c4)||(c1&&c3&&!c4)||(c1&&c2&&!c4)||(c2&&c3&&!c4)||(c1&&c2&&c3)||(c0&&c2&&!c4);
+	[fault5] faulty true -> b4=!b4, r=(b0&&b1 &&b2)||(b0&&b2&&b3)||(b0&&b3&&!b4)||(b0&&b1&&b3)||(b0&&b1&&!b4)||(b1&&b3&&!b4)||(b1&&b2&&!b4)||(b2&&b3&&!b4)||(b1&&b2&&b3)||(b0&&b2&&!b4);
        
 }
 
 Main(){
-	m1: Memory;
-	run m1();
+	m: Memory;
+	run m();
 }
 
