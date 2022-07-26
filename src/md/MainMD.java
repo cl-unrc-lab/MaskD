@@ -55,9 +55,9 @@ public class MainMD {
               }
               else{
                 if (!deterministic)
-                  System.out.println("Masking Distance: "+md.calculateDistance());
+                  System.out.println("Masking Distance: "+md.calculateDistanceFixPoint());
                 else
-                  System.out.println("Masking Distance: "+md.calculateDistanceBFS());
+                  System.out.println("Masking Distance: "+md.calculateDistanceShortestPath());
                 if (printTrace){
                   md.printTraceToError();
                 }

@@ -191,7 +191,7 @@ public class MaskingDistance{
             System.out.println("Game graph states: "+g.getNumNodes());
     }
 
-    public double calculateDistance(){
+    public double calculateDistanceFixPoint(){
         System.out.println("Calculating Distance...");
 
         g.getErrState().setDistanceValue(1);
@@ -268,7 +268,7 @@ public class MaskingDistance{
         return strategy;
     }
     
-    public double calculateDistanceBFS(){
+    public double calculateDistanceShortestPath(){
         System.out.println("Calculating Distance...");
 
         g.getErrState().setDistanceValue(1);

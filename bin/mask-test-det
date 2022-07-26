@@ -35,14 +35,6 @@ time ./maskD    -det -nb -l ../tests/standard/nominal/phils/phils5.test ../tests
 echo "6 phils"
 time ./maskD    -det -nb -l ../tests/standard/nominal/phils/phils6.test ../tests/standard/faulty/phils/phils6.test
 
-echo "----------------------------Byzantine Generals test----------------------------"
-echo "3 generals "
-time ./maskD   -det  ../tests/standard/nominal/byzantine/byz3.test ../tests/standard/faulty/byzantine/byz3.test 
-echo "4 generals"
-time ./maskD    -det ../tests/standard/nominal/byzantine/byz4.test ../tests/standard/faulty/byzantine/byz4.test
-echo "5 generals"
-time ./maskD    -det ../tests/standard/nominal/byzantine/byz5.test ../tests/standard/faulty/byzantine/byz5.test
-
 echo "----------------------------Raft Log[size=5] Replication (Consistency Check) test----------------------------"
 echo "1 follower "
 time ./maskD    -det ../tests/standard/nominal/raft/raftConsistency.test ../tests/standard/faulty/raft/raftConsistency.test
@@ -50,35 +42,3 @@ echo "2 followers"
 time ./maskD    -det ../tests/standard/nominal/raft/raftConsistency2.test ../tests/standard/faulty/raft/raftConsistency2.test
 echo "3 followers"
 time ./maskD    -det ../tests/standard/nominal/raft/raftConsistency3.test ../tests/standard/faulty/raft/raftConsistency3.test
-
-echo "----------------------------Bounded Retransmission Protocol test----------------------------"
-echo "1 chunk(s), 1 retransmission(s)"
-time ./maskD    -det ../tests/standard/nominal/brp/brpN1.test ../tests/standard/faulty/brp/brpN1M1.test
-echo "1 chunk(s), 5 retransmission(s)"
-time ./maskD    -det ../tests/standard/nominal/brp/brpN1.test ../tests/standard/faulty/brp/brpN1M5.test
-echo "1 chunk(s), 10 retransmission(s)"
-time ./maskD    -det ../tests/standard/nominal/brp/brpN1.test ../tests/standard/faulty/brp/brpN1M10.test
-echo "1 chunk(s), 20 retransmission(s)"
-time ./maskD    -det ../tests/standard/nominal/brp/brpN1.test ../tests/standard/faulty/brp/brpN1M20.test
-echo "1 chunk(s), 40 retransmission(s)"
-time ./maskD    -det ../tests/standard/nominal/brp/brpN1.test ../tests/standard/faulty/brp/brpN1M40.test
-echo "5 chunk(s), 1 retransmission(s)"
-time ./maskD    -det ../tests/standard/nominal/brp/brpN5.test ../tests/standard/faulty/brp/brpN5M1.test
-echo "5 chunk(s), 5 retransmission(s)"
-time ./maskD    -det ../tests/standard/nominal/brp/brpN5.test ../tests/standard/faulty/brp/brpN5M5.test
-echo "5 chunk(s), 10 retransmission(s)"
-time ./maskD    -det ../tests/standard/nominal/brp/brpN5.test ../tests/standard/faulty/brp/brpN5M10.test
-echo "5 chunk(s), 20 retransmission(s)"
-time ./maskD    -det ../tests/standard/nominal/brp/brpN5.test ../tests/standard/faulty/brp/brpN5M20.test
-echo "5 chunk(s), 40 retransmission(s)"
-time ./maskD    -det ../tests/standard/nominal/brp/brpN5.test ../tests/standard/faulty/brp/brpN5M40.test
-echo "10 chunk(s), 1 retransmission(s)"
-time ./maskD    -det ../tests/standard/nominal/brp/brpN10.test ../tests/standard/faulty/brp/brpN10M1.test
-echo "10 chunk(s), 5 retransmission(s)"
-time ./maskD    -det ../tests/standard/nominal/brp/brpN10.test ../tests/standard/faulty/brp/brpN10M5.test
-echo "10 chunk(s), 10 retransmission(s)"
-time ./maskD    -det ../tests/standard/nominal/brp/brpN10.test ../tests/standard/faulty/brp/brpN10M10.test
-echo "10 chunk(s), 20 retransmission(s)"
-time ./maskD    -det ../tests/standard/nominal/brp/brpN10.test ../tests/standard/faulty/brp/brpN10M20.test
-echo "10 chunk(s), 40 retransmission(s)"
-time ./maskD    -det ../tests/standard/nominal/brp/brpN10.test ../tests/standard/faulty/brp/brpN10M40.test
