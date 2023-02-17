@@ -3,6 +3,11 @@ package games;
 import java.util.*;
 import model.*;
 
+/**
+* Game Node explicit implementation
+*  
+* @author Luciano Putruele
+*/
 public class GameNode implements Comparable<Object>{
 
 	ModelState specState; // Current state of the Specification
@@ -112,15 +117,6 @@ public class GameNode implements Comparable<Object>{
 			res = "ERR_STATE";
 		else
 			res = "{ "+specState.toString()+" , "+(symbol.isFromSpec()?"S_":(symbol.getLabel().equals("")?"#":"I_"))+symbol.getLabel()+" , "+impState.toString()+" , "+player+" }";
-		return res;
-	}
-
-	public String toString2(){
-		String res;
-		if (this.isErrState())
-			res = "ERR_STATE";
-		else
-			res = "SPEC: "+", SYMBOL: "+(symbol.isFromSpec()?"S":(symbol.getLabel().equals("")?"#":"I"))+symbol.getLabel()+", IMP:"+", PLAYER: "+player;
 		return res;
 	}
 

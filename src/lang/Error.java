@@ -12,7 +12,7 @@ public class Error {
 	
 	public Error(String msg, int lineNumber){
 		errorMsg = msg;
-		line= new Integer(lineNumber);
+		line = lineNumber;
 	}
 	
 	public String getCompleteErrorMsg(){

@@ -4,23 +4,28 @@ import java.util.*;
 import model.*;
 import java.io.*;
 
+/**
+* Game Graph explicit implementation
+*  
+* @author Luciano Putruele
+*/
 public class GameGraph{
 
 	private HashMap<GameNode, HashSet<GameNode>> succList; // Successors adjacency list
 	private HashMap<GameNode, HashSet<GameNode>> preList; // Predecessors adjacency list
-	private HashMap<Pair, LinkedList<Action>> actions; // actions for edges
+	private HashMap<Pair, ArrayList<Action>> actions; // actions for edges
 	private GameNode initial; // Initial state
-	private LinkedList<GameNode> nodes; // States
+	private ArrayList<GameNode> nodes; // States
 	private int numNodes;
 	private int numEdges;
-	private GameNode errState; // Special error state
+	private GameNode errState; // Distinguished error state
 
 	public GameGraph() {
 		succList = new HashMap<GameNode, HashSet<GameNode>>();
 		preList = new HashMap<GameNode, HashSet<GameNode>>();
-		actions = new HashMap<Pair, LinkedList<Action>>();
+		actions = new HashMap<Pair, ArrayList<Action>>();
 		numNodes = numEdges = 0;
-		nodes = new LinkedList<GameNode>();
+		nodes = new ArrayList<GameNode>();
 		errState = new GameNode(null,null,new Action("ERR", false, false, false),"");
 		addNode(errState);
 
@@ -47,7 +52,7 @@ public class GameGraph{
 		return initial;
 	}
 
-	public HashMap<Pair, LinkedList<Action>> getActions(){
+	public HashMap<Pair, ArrayList<Action>> getActions(){
 		return actions;
 	}
 
@@ -90,13 +95,13 @@ public class GameGraph{
 			preList.get(to).add(from);
 			Pair transition = new Pair(from,to);
 			if (actions.get(transition) == null){
-				actions.put(transition, new LinkedList<Action>());
+				actions.put(transition, new ArrayList<Action>());
 			}
 			actions.get(transition).add(a);
 		}
 	}
 
-	public LinkedList<GameNode> getNodes(){
+	public ArrayList<GameNode> getNodes(){
 		return nodes;
 	}
 
@@ -110,12 +115,12 @@ public class GameGraph{
 
 	public String createDot(int lineLimit, String name, boolean debugMode){
 		String res = "";
-		LinkedList<GameNode> ns;
+		ArrayList<GameNode> ns;
 		if (debugMode){
-			ns = new LinkedList<GameNode>();
+			ns = new ArrayList<GameNode>();
 			ns.add(errState);
 			ns.addAll(getPredecessors(errState));
-			LinkedList<GameNode> ns_ = new LinkedList<GameNode>();
+			ArrayList<GameNode> ns_ = new ArrayList<GameNode>();
 			for (int i=0; i<ns.size(); i++){
 				ns_.addAll(getPredecessors(ns.get(i)));
 			}
@@ -133,8 +138,6 @@ public class GameGraph{
 			lineCount++;
 			if (v.getPlayer().equals("V"))
 				res += "    "+ v.getId() +" [label=\""+v.toStringDot()+"\",color=\"lightblue\"];\n";
-			if (v.getPlayer().equals("P"))
-				res += "    "+ v.getId() +" [label=\""+v.toStringDot()+"\",color=\"orange\"];\n";
 			if (v.getPlayer().equals("R"))
 				if (v == initial)
 					res += "    "+ v.getId() +" [label=\""+v.toStringDot()+"\",color=\"pink\"];\n";

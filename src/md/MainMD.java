@@ -5,6 +5,11 @@ import lang.*;
 import core.*;
 
 
+/**
+* Main class
+*  
+* @author Luciano Putruele
+*/
 public class MainMD {
      
     
@@ -66,6 +71,7 @@ public class MainMD {
                 md.createDot(5000);
             }
             catch(Exception e){
+              e.printStackTrace();
               System.out.println("An error occurred");
             }
         }

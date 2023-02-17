@@ -5,48 +5,60 @@ import model.*;
 import games.*;
 import lang.*;
 
+/**
+* Core functionality of MaskD
+*  
+* @author Luciano Putruele
+*/
 public class MaskingDistance{
 
-    private GameGraph g; // The masking distance game graph, undefined until buildGraph is called
+    private GameGraph g; 
     private boolean noBisimulation = false;
-    private Program pSpec;
-    private Program pImp;
+    private Model spec;
+    private Model imp;
+    private String specName, impName;
     private boolean verbose;
 
+    /**
+    * Constructor for the class, calls buildGraph and sets up the lineal programming libraries.
+    *
+    * @param  specProgram  the nominal model
+    * @param  impProgram  the fault-tolerant model
+    * @param  deadlockIsError treat deadlock states as error (terminal states)?
+    * @param  noBisim does the specification not need to simulate the implementation?
+    * @param  verb turn verbosity on?
+    */
     public MaskingDistance(Program specProgram, Program impProgram, boolean deadlockIsError, boolean noBisim, boolean verb) throws InterruptedException{
         noBisimulation = noBisim;
-        pSpec = specProgram;
-        pImp = impProgram;
-        verbose = verb;
-        buildGraph(deadlockIsError);
-    }
-
-    public GameGraph getG(){
-        return g;
-    }
-
-    public void buildGraph(boolean deadlockIsError) throws InterruptedException{
-        //This method builds a game graph for the Masking Distance Game, there are two players: the Refuter(R) and the Verifier(V)
-        //The refuter plays with the implementation(imp), this means choosing any action available (faulty or not)
-        //and the verifier plays with the specification(spec), he tries to match the action played by the refuter, if he can't then an error state is reached.
-        Model spec,imp;
         System.out.println("Building Models...");
-        spec = pSpec.toLTS(true);
-        imp = pImp.toLTS(false);
+        spec = specProgram.toLTS(true);
+        specName = specProgram.getName();
+        imp = impProgram.toLTS(false);
+        impName = impProgram.getName();
         if (imp.getIsWeak()){
             spec.setIsWeak(true);
             System.out.println("Saturating Models...");
         }
         spec.saturate();
         imp.saturate();
+        verbose = verb;
         if (verbose){
             System.out.println("Spec states: "+spec.getNumNodes());
             System.out.println("Spec edges: "+spec.getNumEdges());
             System.out.println("Imp states: "+imp.getNumNodes());
             System.out.println("Imp edges: "+imp.getNumEdges());
         }
-        spec.createDot(false);
-        imp.createDot(true);
+        buildGraph(deadlockIsError);
+    }
+
+    /**
+    * Builds Game Graph
+    * @param  deadlockIsError treat deadlock states as error (terminal states)?
+    */
+    public void buildGraph(boolean deadlockIsError) throws InterruptedException{
+        //This method builds a game graph for the Masking Distance Game, there are two players: the Refuter(R) and the Verifier(V)
+        //The refuter plays with the implementation(imp), this means choosing any action available (faulty or not)
+        //and the verifier plays with the specification(spec), he tries to match the action played by the refuter, if he can't then an error state is reached.        
         System.out.println("Building Game Graph...");
         g = new GameGraph();
 
@@ -80,7 +92,7 @@ public class MaskingDistance{
                             if (toOld == null){
                                 g.addNode(curr_);
                                 if (curr_.getSymbol().isFaulty())
-                                    curr_.setMask(true); //this may be deprecated
+                                    curr_.setMask(true);
                                 g.addEdge(curr,curr_, curr_.getSymbol()); 
                                 iterSet.add(curr_);
                             }
@@ -187,10 +199,17 @@ public class MaskingDistance{
                 }
             }
         }
-        if (verbose)
+        if (verbose){
             System.out.println("Game graph states: "+g.getNumNodes());
+            System.out.println("Game graph edges: "+g.getNumEdges());
+        }
     }
 
+    /**
+    * Calculate Masking Distance using fix point algorithm, this is the general solution (default)
+    *
+    * @return real value between 0 and 1 representing the masking distance value at initial vertex
+    */
     public double calculateDistanceFixPoint(){
         System.out.println("Calculating Distance...");
 
@@ -268,6 +287,12 @@ public class MaskingDistance{
         return strategy;
     }
     
+    /**
+    * Calculate Masking Distance using shortest path algorithm, this solution has as precondition the models being deterministic
+    * in their labels, i.e. no two actions available at any state have the same label. 
+    *
+    * @return real value between 0 and 1 representing the masking distance value at initial vertex
+    */
     public double calculateDistanceShortestPath(){
         System.out.println("Calculating Distance...");
 
@@ -302,57 +327,9 @@ public class MaskingDistance{
         return res;
     }
 
-    /*private double calculateDistanceDijsktra(){
-        System.out.println("Calculating Distance...");
-
-        g.getInitial().setDistanceValue(0);
-
-        for (int count = 0; count < g.getNodes().size(); count++){
-            int min = Integer.MAX_VALUE;
-            int minIndex = 0;
-            GameNode from;
-            for (int i = 0;i<g.getNodes().size();i++){
-                if (!g.getNodes().get(i).getVisited() && g.getNodes().get(i).getDistanceValue() < min){
-                    min = g.getNodes().get(i).getDistanceValue();
-                    minIndex = i;
-                }
-            }
-            from = g.getNodes().get(minIndex);
-            from.setVisited(true);
-            for (GameNode to : g.getSuccessors(from)){
-                if (!to.getVisited()){
-                    Pair p = new Pair(from,to);
-                    int addedCost = 0;
-                    for (int i=0; i < g.getActions().get(p).size(); i++)
-                        if (g.getActions().get(p).get(i).isFaulty())
-                            addedCost = 1;
-                    if (from.getDistanceValue()+addedCost < to.getDistanceValue()){
-                        to.setDistanceValue(from.getDistanceValue() + addedCost);
-                        to.setPreviousNodeInPath(from);
-                    }
-                }
-            }
-        }
-
-        int minDistance = g.getErrState().getDistanceValue();
-        
-        double res= Math.round((double)1/(1+minDistance) * Math.pow(10, 3)) / Math.pow(10, 3);
-        return res;
-    }*/
-
-    //Only works together with -det
-    /*public void printTraceToError(){
-        System.out.println("Masking Distance: "+calculateDistanceDijsktra());
-        System.out.println("\n·····ERROR PATH·····\n");
-        GameNode curr = g.getErrState();
-        int i = 0;
-        while (curr != null){
-            System.out.println(i+". "+curr.toString());
-            curr = curr.getPreviousNodeInPath();
-            i++;
-        }
-    }*/
-
+    /**
+    * Print a the optimal path/strategies to the error state
+    */
     public void printTraceToError(){
         if (g.getInitial().getDistanceValue() == Integer.MAX_VALUE){
             System.out.println("No trace to error!");
@@ -364,7 +341,6 @@ public class MaskingDistance{
         int i = 0;
         while (curr != g.getErrState()){
             System.out.println(i+". "+curr.toString());
-            //System.out.println(i+". "+curr.getDistanceValue());
             if (curr.isVerifier())
                 curr = strategyV(curr);
             else
@@ -400,9 +376,14 @@ public class MaskingDistance{
     }
 
     public void createDot(int lineLimit){
-        g.createDot(lineLimit, (pSpec.getName()+"---"+pImp.getName()), true);
+        spec.createDot(false);
+        imp.createDot(true);
+        g.createDot(lineLimit, specName+"---"+impName, false);
     }
 
+    /**
+    * Initiates an interactive simulation of the game
+    */
     public void simulateGame(){
         GameNode curr;
         Stack<GameNode> track = new Stack<GameNode>();

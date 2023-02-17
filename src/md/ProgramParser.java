@@ -6,7 +6,7 @@ import lang.*;
 import java.io.*;
 import java.util.LinkedList;
 
-import parserProgram.*;
+import parserL.*;
 
 /**
  * This class represents the compiler.

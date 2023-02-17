@@ -7,10 +7,10 @@ import java.io.*;
 public class Model {
 	private HashMap<ModelState, HashSet<ModelState>> succList; // Succesors adjacency list
 	private HashMap<ModelState, HashSet<ModelState>> preList; // Predecessors adjacency list
-	private HashMap<Pair, LinkedList<Action>> actions; // Edge actions
+	private HashMap<Pair, ArrayList<Action>> actions; // Edge actions
 	private ModelState initial; // Initial State
 	private LinkedList<Var> sharedVars; // Global variables
-	private LinkedList<ModelState> nodes; // Global states
+	private ArrayList<ModelState> nodes; // Global states
 	private int numNodes;
 	private int numEdges;
 	private LinkedList<Proc> procs;
@@ -25,9 +25,9 @@ public class Model {
 		sharedVars.addAll(svs.getIntVars());
 		succList = new HashMap<ModelState, HashSet<ModelState>>();
 		preList = new HashMap<ModelState, HashSet<ModelState>>();
-		actions = new HashMap<Pair, LinkedList<Action>>();
+		actions = new HashMap<Pair, ArrayList<Action>>();
 		numNodes = numEdges = 0;
-		nodes = new LinkedList<ModelState>();
+		nodes = new ArrayList<ModelState>();
 		procs = new LinkedList<Proc>();
 		procDecls = new LinkedList<String>();
 		isWeak = false;
@@ -58,7 +58,7 @@ public class Model {
 		return constants;
 	}
 
-	public HashMap<Pair, LinkedList<Action>> getActions(){
+	public HashMap<Pair, ArrayList<Action>> getActions(){
 		return actions;
 	}
 
@@ -123,7 +123,7 @@ public class Model {
 			preList.get(to).add(from);
 			Pair transition = new Pair(from,to);
 			if (actions.get(transition) == null){
-				actions.put(transition,new LinkedList<Action>());
+				actions.put(transition,new ArrayList<Action>());
 			}
 			actions.get(transition).add(a);
 			return true;
@@ -131,7 +131,7 @@ public class Model {
 		return false;
 	}
 
-	public LinkedList<ModelState> getNodes(){
+	public ArrayList<ModelState> getNodes(){
 		return nodes;
 	}
 
@@ -190,19 +190,19 @@ public class Model {
 		}
 		boolean change = true;
 		//this lists will share the same size
-		LinkedList<ModelState> fsts;
-		LinkedList<ModelState> snds;
-		LinkedList<String> lbls;
-		LinkedList<Boolean> isTaus;
+		ArrayList<ModelState> fsts;
+		ArrayList<ModelState> snds;
+		ArrayList<String> lbls;
+		ArrayList<Boolean> isTaus;
 
 
 		//Saturate graph
 		while (change){
 			change = false;
-			fsts = new LinkedList<ModelState>();
-			snds = new LinkedList<ModelState>();
-			lbls = new LinkedList<String>();
-			isTaus = new LinkedList<Boolean>();
+			fsts = new ArrayList<ModelState>();
+			snds = new ArrayList<ModelState>();
+			lbls = new ArrayList<String>();
+			isTaus = new ArrayList<Boolean>();
 
 			for (ModelState p : nodes){
 				for (ModelState p_ : succList.get(p)){

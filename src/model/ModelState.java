@@ -136,6 +136,8 @@ public class ModelState implements Comparable<Object>{
 					res += model.getProcDecls().get(i)+v.getName()+ "" +stateInts.get(model.getProcDecls().get(i)+v.getName()) + "·";
 			}
 		}
+		if (res.length() > 0 && res.charAt(res.length() - 1) == '·')
+			res = res.substring(0,res.length() - 1);
 		return res;
 	}
 
